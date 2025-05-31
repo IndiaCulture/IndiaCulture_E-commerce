@@ -128,12 +128,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# During development, this tells Django where your static files are.
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'myapp', 'static'),  # For dev-time static files
+    os.path.join(BASE_DIR, 'myapp', 'static'),  # Your app's static files
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # For collectstatic (prod)
+# This is where `collectstatic` will put all files for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Use WhiteNoise to serve static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL='/myapp/media/'
