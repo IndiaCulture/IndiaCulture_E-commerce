@@ -1,0 +1,47 @@
+{% load static %}
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+<section class="products-section">
+        <div class="container">
+            <div class="products-title mb-4">
+                <span>{{ category_name }}</span>
+            </div>
+            <div class="box">
+                <div class="inbox">
+                        <a href="{% url 'home' %}">Home/</a>
+                        <a href="{% url 'categories' %}">Category/</a>
+                        <a href="#">{{ category_name }}</a>
+                </div>
+            </div>
+            <br><br>
+            <div class="products-grid">
+    {% if products %}
+        {% for product in products %}
+            <div class="product-card">
+                <a href="{% url 'product_details' product.id %}" >
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <div class="product-info">
+                    <div>
+                        
+                            <div class="product-title">{{ product.name }}</div>
+                        
+                        <div class="product-meta">{{ product.short_description }}</div>
+                        <div class="product-price">₹{{ product.price }}</div>
+                    </div>
+                    </a>
+                    <a href="{% url 'add_to_cart' product.id %}" data-auth-required>
+                        <button class="bestsell-btn mt-2">
+                            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No products available in this category.</p>
+    {% endif %}
+</div>
+

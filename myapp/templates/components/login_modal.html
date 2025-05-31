@@ -1,0 +1,24 @@
+<!-- Simple Login Prompt Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-0 border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-gradient bg-primary text-white rounded-top-4 border-0">
+        <h5 class="modal-title mx-auto" id="loginModalLabel">
+          <i class="bi bi-person-circle me-2"></i>
+          Please Log In
+        </h5>
+      </div>
+      <div class="modal-body text-center py-4">
+        <p class="mb-4 fs-5 text-secondary">You must be logged in to continue.</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{% url 'login' %}" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Login
+          </a>
+          <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-pill" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

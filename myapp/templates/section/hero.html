@@ -1,0 +1,38 @@
+{% load static %}
+<div class="position-relative">
+  
+
+  <!-- Oblique Image Section -->
+  <div class="oblique position-absolute top-0 h-100 d-md-block d-none w-50">
+    <div class="oblique-image position-absolute fixed-top end-0 h-100"></div>
+  </div>
+
+  <!-- Carousel Hero Section -->
+  <div class="container d-flex justify-content-center align-items-center position-relative" style="padding: 0; z-index: 2;">
+    <div id="heroCarousel" class="carousel slide carousel-container" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        {% for offer in offers %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <a href="{% url 'product_details' offer.product.id %}">
+              <img src="{{ offer.image.url }}" class="d-block w-100" alt="Offer for {{ offer.product.name }}">
+            </a>
+          </div>
+        {% empty %}
+          <div class="carousel-item active">
+            <img src="{% static 'myapp/img/default_offer.jpg' %}" class="d-block w-100" alt="Default Offer">
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Carousel Controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>

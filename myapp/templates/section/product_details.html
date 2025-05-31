@@ -1,0 +1,60 @@
+{% load static %}
+<style>
+    a{
+        text-decoration: none;
+    }
+    
+</style>
+<section class="product-section position-relative">
+    <div class="container">
+        <div class="products-title mb-4">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <span>{{ product.name }}</span>
+        </div>
+
+        <br><br>
+
+        <div class="product-card-details shadow-lg">
+            <div class="row product-details-flex align-items-center">
+                <div class="col-md-5 text-center mb-4 mb-md-0">
+                    <div class="product-image-container d-inline-block" style="width: 280px; height: 280px; background: #e6f0ff; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 4px 24px #4f8cff18;">
+                        <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 1.2rem;" />
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="product-title">{{ product.name }}</div>
+                    <div class="product-meta">
+                        Category: {{ product.category.name }} &nbsp;|&nbsp;
+                        {% if product.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}
+                    </div>
+                    <div class="product-price">₹{{ product.price }}</div>
+                    <div class="product-desc">
+                        {{ product.description }}
+                    </div>
+
+                    <a href="{% url 'add_to_cart' product.id %}" data-auth-required>
+                        <button class="btn btn-cart">
+                            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                    </a>
+                    {% if user.is_authenticated %}
+                        {% if in_wishlist %}
+                            <a href="{% url 'remove_from_wishlist' product.id %}" ><button class="btn btn-cart">Remove from Wishlist</button></a>
+                        {% else %}
+                            <a href="{% url 'add_to_wishlist' product.id %}" ><button class="btn btn-cart">Add to Wishlist</button></a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}" ><button class="btn btn-cart">Login to Wishlist</button></a>
+                    {% endif %}
+
+                    <ul class="product-info-list mt-4">
+                        <li><i class="fa-solid fa-truck-fast"></i>Free shipping on orders over ₹399</li>
+                        <li><i class="fa-solid fa-shield-halved"></i>100% Authentic Products</li>
+                        <li><i class="fa-solid fa-phone"></i>24/7 Customer Support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

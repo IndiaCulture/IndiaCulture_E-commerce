@@ -1,0 +1,36 @@
+{% load static %}
+<style>
+.insta-video-card blockquote.instagram-media {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 9/16;
+}
+</style>
+<section class="insta-section">
+    <div class="container">
+        <div class="insta-title mb-3">
+            <i class="fa-brands fa-instagram me-2" style="color:#e1306c"></i>
+            Popular Instagram Videos
+        </div>
+        <div class="insta-scroll d-flex gap-3">
+            <!-- Static Reel 1 -->
+            <a href="https://www.instagram.com/_indiaculture_?igsh=MW5jYzdtYmxlc2p4bg==" target="_blank" class="insta-video-card" style="aspect-ratio:9/16; min-width:120px; max-width:180px; padding:0;">
+                <video src="{% static 'myapp/gif/indiaculture1.mp4' %}" class="w-100 h-100 object-fit-cover" alt="Static Offer 1" autoplay loop muted playsinline></video>
+            </a>
+
+            <!-- Static Reel 2 -->
+            <a href="https://www.instagram.com/_indiaculture_?igsh=MW5jYzdtYmxlc2p4bg==" target="_blank" class="insta-video-card" style="aspect-ratio:9/16; min-width:120px; max-width:180px; padding:0;">
+                <video src="{% static 'myapp/gif/indiaculture2.mp4' %}" class="w-100 h-100 object-fit-cover" alt="Static Offer 2" autoplay loop muted playsinline></video>
+            </a>
+
+            <!-- Dynamic Social Offers -->
+            {% for offer in social_offers %}
+                <a href="{% url 'product_details' offer.product.id %}" class="insta-video-card" style="aspect-ratio:9/16; min-width:120px; max-width:180px; padding:0;">
+                    <video src="{{ offer.gif.url }}" class="w-100 h-100 object-fit-cover" alt="{{ offer.product.name }}" autoplay loop muted playsinline></video>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>

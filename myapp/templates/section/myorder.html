@@ -1,0 +1,103 @@
+<section class="orders-section py-5">
+  <div class="container">
+    <div class="orders-card">
+      <h2 class="orders-title mb-4"><i class="fa-solid fa-box-open me-2"></i> My Orders</h2>
+      {% if orders %}
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle text-center orders-table">
+            <thead class="table-light">
+              <tr>
+                <th>Order Code</th>
+                <th>Product(s)</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <td>#{{ order.order_code }}</td>
+                <td>
+                  {% if order.items.all %}
+                    <div class="d-flex flex-column align-items-center">
+                      {% for item in order.items.all %}
+                        <div class="d-flex align-items-center mb-2">
+                          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 8px;">
+                          <span class="fw-bold small">{{ item.product.name }}</span>
+                          <span class="text-muted small ms-2">x{{ item.quantity }}</span>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <span class="text-muted">No items</span>
+                  {% endif %}
+                </td>
+                <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <span class="order-status
+                    {% if order.status == 'pending' %}status-processing
+                    {% elif order.status == 'processing' %}status-processing
+                    {% elif order.status == 'shipped' %}status-shipped
+                    {% elif order.status == 'delivered' %}status-delivered
+                    {% elif order.status == 'cancelled' %}status-cancelled
+                    {% endif %}">
+                    {{ order.get_status_display }}
+                  </span>
+                </td>
+                <td>₹{{ order.total_price }}</td>
+              </tr>
+              <!-- Order Detail & Tracking -->
+              <tr>
+                <td colspan="5">
+                  <div class="track-section">
+                    <div class="row">
+                      <div class="col-md-6 text-start">
+                        <h6 class="fw-bold mb-2 track-title">Shipping Info:</h6>
+                        <p class="mb-1">{{ order.full_name }} | {{ order.phone }}</p>
+                        <p class="mb-1">{{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+                        <p class="mb-1">Payment Method: <strong>{{ order.payment_method }}</strong></p>
+                        <p class="mb-1">Expected Delivery: 
+                          <strong>
+                            {% if order.expected_delivery %}
+                              {{ order.expected_delivery|date:"Y-m-d" }}
+                            {% else %}
+                              N/A
+                            {% endif %}
+                          </strong>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="track-steps">
+                          <div class="track-step {% if order.status in 'pending,processing,shipped,delivered' %}completed{% endif %}">
+                            <div class="circle"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="label">Ordered</div>
+                          </div>
+                          <div class="track-step {% if order.status in 'processing,shipped,delivered' %}completed{% endif %}">
+                            <div class="circle"><i class="fa-solid fa-box"></i></div>
+                            <div class="label">Packed</div>
+                          </div>
+                          <div class="track-step {% if order.status in 'shipped,delivered' %}completed{% endif %}">
+                            <div class="circle"><i class="fa-solid fa-truck"></i></div>
+                            <div class="label">Shipped</div>
+                          </div>
+                          <div class="track-step {% if order.status == 'delivered' %}completed{% endif %}">
+                            <div class="circle"><i class="fa-solid fa-house"></i></div>
+                            <div class="label">Delivered</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="alert alert-info">You haven’t placed any orders yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</section>

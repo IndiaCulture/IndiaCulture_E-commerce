@@ -1,0 +1,338 @@
+<style>
+    .body-Signin {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #e3f0ff 0%, #a8edea 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(40px);
+            animation: blobMove 18s infinite alternate;
+            z-index: 0;
+        }
+        .blob1 {
+            width: 400px; height: 400px;
+            background: linear-gradient(135deg, #43cea2 60%, #185a9d 100%);
+            top: -100px; left: -120px;
+            animation-delay: 0s;
+        }
+        .blob2 {
+            width: 300px; height: 300px;
+            background: linear-gradient(135deg, #185a9d 60%, #43cea2 100%);
+            bottom: -80px; right: -100px;
+            animation-delay: 4s;
+        }
+        @keyframes blobMove {
+            0% { transform: scale(1) translateY(0) translateX(0);}
+            50% { transform: scale(1.1) translateY(40px) translateX(30px);}
+            100% { transform: scale(1) translateY(0) translateX(0);}
+        }
+
+        .auth-wrapper {
+            display: flex;
+            flex-direction: row;
+            width: 900px;
+            max-width: 100%;
+            background: rgba(255,255,255,0.97);
+            border-radius: 30px;
+            box-shadow: 0 12px 40px rgba(67,206,162,0.18), 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(60px);}
+            100% { opacity: 1; transform: translateY(0);}
+        }
+
+        .form-wrapper {
+            flex: 1 1 60%;
+            padding: 48px 48px 48px 56px;
+            background: rgba(255,255,255,0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 2px 12px rgba(67,206,162,0.06);
+        }
+
+        form {
+            display: none;
+            flex-direction: column;
+            gap: 22px;
+            width: 100%;
+            max-width: 340px;
+            animation: formFade 0.7s;
+        }
+        @keyframes formFade {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        form.active {
+            display: flex;
+            animation: formFade 0.7s;
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 18px;
+            color: #185a9d;
+            font-size: 2.1rem;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px #43cea233;
+            animation: popIn 0.7s;
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8);}
+            100% { opacity: 1; transform: scale(1);}
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 15px;
+            color: #185a9d;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1.5px solid #43cea2;
+            font-size: 15px;
+            margin-top: 7px;
+            background: #e3f0ff;
+            transition: border 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        input:focus {
+            border: 2px solid #185a9d;
+            box-shadow: 0 0 0 2px #185a9d55;
+        }
+
+        .submit {
+            margin-top: 10px;
+            padding: 14px;
+            border: none;
+            background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+            color: white;
+            font-weight: bold;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 16px #43cea233;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit::after {
+            content: "";
+            position: absolute;
+            left: -60%;
+            top: 0;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(120deg, #fff6, #fff0 60%);
+            transform: skewX(-20deg);
+            transition: left 0.5s;
+        }
+        .submit:hover {
+            background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 24px #185a9d44;
+        }
+        .submit:hover::after {
+            left: 120%;
+        }
+
+        .side-panel {
+            flex: 1 1 40%;
+            background: linear-gradient(135deg, #43cea2 60%, #185a9d 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            transition: background 0.5s;
+            box-shadow: -2px 0 16px #43cea222;
+        }
+
+        .side-panel-content {
+            z-index: 2;
+            position: relative;
+            animation: fadeInPanel 1.2s;
+        }
+        @keyframes fadeInPanel {
+            0% { opacity: 0; transform: translateY(-30px);}
+            100% { opacity: 1; transform: translateY(0);}
+        }
+
+        .side-panel h3 {
+            font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            text-shadow: 0 2px 12px #185a9d55;
+            animation: popIn 0.7s;
+        }
+
+        .toggle-btn {
+            margin-top: 10px;
+            background: transparent;
+            border: 2px solid #fff;
+            padding: 12px 32px;
+            border-radius: 24px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: background 0.3s, color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 12px #fff3;
+            position: relative;
+            overflow: hidden;
+        }
+        .toggle-btn::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, #fff3 0%, #fff0 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+        .toggle-btn:hover {
+            background: #fff;
+            color: #185a9d;
+            transform: scale(1.05);
+        }
+        .toggle-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* Floating icons for animation */
+        .icon-float {
+            position: absolute;
+            opacity: 0.12;
+            font-size: 60px;
+            pointer-events: none;
+            animation: floatIcon 8s infinite alternate;
+            z-index: 1;
+            color: #185a9d;
+        }
+        .icon1 { top: 30px; left: 60px; animation-delay: 0s;}
+        .icon2 { bottom: 40px; right: 80px; animation-delay: 2s;}
+        .icon3 { top: 120px; right: 40px; animation-delay: 4s;}
+        @keyframes floatIcon {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(30px);}
+        }
+
+        @media (max-width: 900px) {
+            .auth-wrapper {
+            flex-direction: column;
+            width: 98vw;
+            min-width: 0;
+            }
+            .form-wrapper, .side-panel {
+            width: 100%;
+            min-width: 0;
+            border-radius: 0;
+            box-shadow: none;
+            }
+            .form-wrapper {
+            padding: 36px 16px 32px 16px;
+            }
+            .side-panel {
+            padding: 24px 12px;
+            }
+        }
+        @media (max-width: 600px) {
+            .auth-wrapper {
+            border-radius: 0;
+            box-shadow: none;
+            }
+            .form-wrapper {
+            padding: 18px 4vw;
+            }
+            .side-panel {
+            padding: 18px 4vw;
+            }
+            .blob1, .blob2, .icon-float { display: none; }
+        }
+</style>
+
+<section class="body-Signin">
+        <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <i class="fa-solid fa-cart-shopping icon-float icon1"></i>
+    <i class="fa-solid fa-gift icon-float icon2"></i>
+    <i class="fa-solid fa-star icon-float icon3"></i>
+    <div class="auth-wrapper">
+        <div class="form-wrapper">
+            <!-- Sign In Form -->
+            <form id="signInForm" method="post" action="{% url 'login' %}" class="active">
+    {% csrf_token %}
+    <h2>Welcome Back</h2>
+    <label>
+        Email
+        <input type="email" name="email" placeholder="Enter your email" required>
+    </label>
+    <label>
+        Password
+        <input type="password" name="password" placeholder="Enter your password" required>
+    </label>
+    <button type="submit" class="submit">Sign In</button>
+</form>
+
+            <!-- Sign Up Form -->
+            <form id="signUpForm" method="post" action="{% url 'signup' %}">
+    {% csrf_token %}
+    <h2>Create Account</h2>
+    <label>
+        Name
+        <input type="text" name="name" placeholder="Your name" required>
+    </label>
+    <label>
+        Email
+        <input type="email" name="email" placeholder="Your email" required>
+    </label>
+    <label>
+        Password
+        <input type="password" name="password" placeholder="Create a password" required>
+    </label>
+    <button type="submit" class="submit">Sign Up</button>
+</form>
+        </div>
+
+        <div class="side-panel">
+            <div class="side-panel-content">
+                <h3 id="panelText">Don't have an account?<br>Sign up and join us!</h3>
+                <button class="toggle-btn" id="toggleBtn">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    
+    </section>

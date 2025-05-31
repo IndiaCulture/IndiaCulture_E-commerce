@@ -1,0 +1,60 @@
+{% load static %}
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+<section class="bestsell-section" id="bestsell">
+    <div class="container">
+        <div class="bestsell-title mb-3">
+            <i class="fa-solid fa-star me-2" style="color:#e1306c"></i>
+            Best Selling Products
+        </div>
+
+        <!-- First Row: Left to Right -->
+        <div class="bestsell-scroll-row">
+            {% for product in row1 %}
+            <div class="bestsell-card">
+                <a href="{% url 'product_details' product.id %}">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <div class="bestsell-info">
+                    <div>
+                        
+                            <div class="bestsell-title-product">{{ product.name }}</div>
+                        
+                        <div class="bestsell-price">₹{{ product.price }}</div>
+                    </div>
+                    </a>
+                    <a href="{% url 'add_to_cart' product.id %}" data-auth-required>
+                        <button class="bestsell-btn mt-2">
+                            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Second Row: Right to Left -->
+        <div class="bestsell-scroll-row reverse">
+            {% for product in row2 %}
+            <div class="bestsell-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <div class="bestsell-info">
+                    <div>
+                        <a href="{% url 'product_details' product.id %}">
+                            <div class="bestsell-title-product">{{ product.name }}</div>
+                        </a>
+                        <div class="bestsell-price">₹{{ product.price }}</div>
+                    </div>
+                    <a href="{% url 'add_to_cart' product.id %}" data-auth-required>
+                        <button class="bestsell-btn mt-2">
+                            <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

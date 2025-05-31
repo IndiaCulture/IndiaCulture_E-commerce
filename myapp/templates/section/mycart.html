@@ -1,0 +1,78 @@
+<div class="floating-shape shape1"></div>
+    <div class="floating-shape shape2"></div>
+    <div class="floating-shape shape3"></div>
+
+    <section class="cart-section position-relative">
+    <div class="container">
+        <div class="cart-card shadow-lg">
+            <div class="cart-title mb-4 d-flex align-items-center">
+                <i class="fa-solid fa-cart-shopping me-2"></i>
+                <span>My Cart</span>
+            </div>
+
+            {% if cart.items.all %}
+            <div class="table-responsive">
+                <table class="table cart-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Details</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart.items.all %}
+                        <tr>
+                            <td>
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 80px;">
+                            </td>
+                            <td>
+                                <div class="product-title">{{ item.product.name }}</div>
+                                <div class="product-meta">
+                                    {{ item.product.volume|default_if_none:"" }}
+                                </div>
+                            </td>
+                            <td>₹{{ item.product.price }}</td>
+                            <td>
+                                <form action="{% url 'update_cart' item.id %}" method="post" class="d-flex">
+                                    {% csrf_token %}
+                                    <input 
+                                        type="number" 
+                                        name="quantity" 
+                                        value="{{ item.quantity }}" 
+                                        min="1" 
+                                        class="form-control w-100"
+                                        onchange="this.form.submit()"
+                                    >
+                                </form>
+                            </td>
+                            
+                            <td>₹{{ item.subtotal }}</td>
+                            <td>
+                                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-outline-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-summary text-end">
+                <div class="cart-total mb-2 fw-bold fs-5">
+                    Total: ₹{{ total }}
+                </div>
+                <a href="{% url 'checkout' %}" class="btn btn-checkout">
+                    <i class="fa-solid fa-credit-card"></i> Proceed to Checkout
+                </a>
+            </div>
+            {% else %}
+            <p class="text-center my-5">Your cart is empty.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>

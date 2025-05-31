@@ -1,0 +1,33 @@
+{% extends "pages/base.html" %}
+
+{% block title %}Signup and Login{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+<div class="position-fixed top-40  p-3" style="z-index: 1080;">
+    {% for message in messages %}
+    <div class="toast align-items-center text-bg-{{ message.tags }} border-0 show fade mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ message }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(toast => {
+            const bsToast = new bootstrap.Toast(toast, { delay: 4000 });
+            bsToast.show();
+        });
+    });
+</script>
+{% endif %}
+
+{% include "section/signin.html" %}
+
+{% endblock %}

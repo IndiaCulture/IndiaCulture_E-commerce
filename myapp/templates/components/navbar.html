@@ -1,0 +1,88 @@
+{% load static %}
+<!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-gradient-blue py-3">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'myapp/img/logo.png' %}" alt="logo" style="height:40px; width:auto; vertical-align:middle;">
+                    <b style="font-family: sans-serif;">INDIACULTURE</b>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <!-- Mobile Close Button -->
+                    <button type="button" class="mobile-close-btn" id="mobileCloseBtn" aria-label="Close menu">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'home' %}"><i class="fa-solid fa-home me-1"></i>Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-store me-1"></i>Categories
+                            </a>
+                                <ul class="dropdown-menu" aria-labelledby="shopDropdown">
+                                    {% for category in categories %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'products' category.name %}">
+                                        <i class="{{ category.icon }} me-1"></i>{{ category.name }}
+                                        </a>
+                                    </li>
+                                    {% empty %}
+                                    <li><span class="dropdown-item text-muted">No categories found</span></li>
+                                    {% endfor %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'categories' %}"><i class="fa-solid fa-eye me-1"></i>View All</a></li>
+                                </ul>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'about' %}"><i class="fa-solid fa-circle-info me-1"></i>About Us</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user me-1"></i>
+                                {% if request.user.is_authenticated %}
+                                    {{ request.user.name|default:request.user.email }}
+                                {% else %}
+                                    My Account
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                {% if request.user.is_authenticated %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">
+                                            <i class="fa-solid fa-sign-out-alt me-1"></i>Logout
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'login' %}">
+                                            <i class="fa-solid fa-sign-in-alt me-1"></i>Login
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    {% if user.is_authenticated %}
+                                        <a class="dropdown-item" href="{% url 'wishlist' %}">
+                                            <i class="fa fa-heart"></i> Wishlist ({{ user.wishlist.count }})
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'myorder' %}">
+                                        <i class="fa-solid fa-box me-1"></i>My Orders
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <a href="{% url 'view_cart' %}" data-auth-required class="btn btn-sm btn-round mb-0 ms-lg-3">
+                        <i class="fa-solid fa-cart-shopping me-1"></i>My Cart
+                    </a>
+                </div>
+                <div class="side-drawer-backdrop" id="sideDrawerBackdrop"></div>
+            </div>
+        </nav>
+        <!-- Navbar End -->

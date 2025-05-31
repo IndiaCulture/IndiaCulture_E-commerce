@@ -1,0 +1,154 @@
+{% load static %}
+  <style>
+    :root {
+      --nature-green: #4e944f;
+      --nature-dark-green: #386641;
+      --nature-light-green: #b7e4c7;
+      --nature-brown: #a98467;
+      --nature-beige: #f5ebe0;
+      --nature-sky: #a3cef1;
+      --nature-sand: #f6c453;
+      --nature-leaf: #6a994e;
+      --nature-forest: #31572c;
+      --nature-earth: #bc6c25;
+      --nature-white: #fff;
+      --nature-black: #222;
+    }
+
+    .categories-section {
+      padding: 2.5rem 0 2rem 0;
+    }
+
+    .categories-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--nature-forest);
+      margin-bottom: 1.5rem;
+      letter-spacing: 1.5px;
+      text-align: left;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeInDown 1s;
+    }
+
+    .categories-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-start;
+    }
+
+    .category-card {
+      flex: 0 0 calc(16.66% - 1rem);
+      max-width: calc(16.66% - 1rem);
+      background: var(--nature-white);
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px 0 #4e944f18;
+      padding: 1rem 0.75rem 0.75rem 0.75rem;
+      text-align: center;
+      transition: transform 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .category-card:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 8px 32px 0 #4e944f33;
+
+    }
+
+    .category-icon {
+      font-size: 2.2rem;
+      color: var(--nature-green);
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+    }
+
+    .category-card:hover .category-icon {
+      color: var(--nature-forest);
+    }
+
+    .category-label {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: var(--nature-forest);
+      margin-bottom: 0.2rem;
+    }
+
+    .category-count {
+      font-size: 0.95rem;
+      color: var(--nature-green);
+      opacity: 0.8;
+    }
+
+    @media (max-width: 767.98px) {
+      .categories-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .categories-grid {
+        gap: 0.75rem;
+      }
+
+      .category-card {
+        flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+        padding: 0.8rem 0.5rem;
+      }
+
+      .category-icon {
+        font-size: 1.6rem;
+        width: 36px;
+        height: 36px;
+      }
+
+      .category-label {
+        font-size: 0.95rem;
+      }
+
+      .category-count {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+  <section class="bestsell-section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="categories-title bestsell-title mb-3">
+        <i class="fa-solid fa-layer-group me-2" style="color:#e1306c;"></i>
+        <span>Categories</span>
+      </div>
+      <a href="{% url 'categories' %}" class="btn btn-link text-primary fw-semibold p-0" style="font-size:1rem; text-decoration:none; color: black;">
+        View All <i class="fa fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="categories-grid">
+      {% for category in categories %}
+        <a href="{% url 'products' category.name %}" class="category-card text-decoration-none">
+          <div class="category-icon">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:72px;height:72px;object-fit:cover;border-radius:8px;">
+            {% else %}
+              <img src="{% static 'myapp/img/placeholder.png' %}" alt="No image" style="width:72px;height:72px;object-fit:cover;border-radius:8px;">
+            {% endif %}
+          </div>
+          <div class="category-label">{{ category.name }}</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
