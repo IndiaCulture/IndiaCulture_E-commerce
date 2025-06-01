@@ -1,4 +1,51 @@
-<h2>Thank you for your order!</h2>
-<p>Order ID: {{ order.order_code }}</p>
-<p>We will deliver to: {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
-<p>Payment Method: {{ order.payment_method }}</p>
+
+    <style>
+        .body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .confirmation-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        p {
+            color: #555;
+            margin: 10px 0;
+        }
+        .my-orders-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .my-orders-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+<div class="body">
+    <div class="confirmation-container">
+        <h2>Thank you for your order!</h2>
+        <p>Order ID: {{ order.order_code }}</p>
+        <p>We will deliver to: {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+        <p>Payment Method: {{ order.payment_method }}</p>
+        <a href="{% url 'my_orders' %}" class="my-orders-link">View My Orders</a>
+    </div>
+</div>

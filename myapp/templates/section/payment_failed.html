@@ -1,5 +1,20 @@
 <div class="container mt-5 text-center">
-    <h2 class="text-danger">Payment Failed!</h2>
-    <p>Something went wrong with your payment. Please try again.</p>
-    <a href="{% url 'checkout' %}" class="btn btn-primary mt-3">Back to Checkout</a>
+    <div class="card shadow-lg p-4">
+        <h2 class="text-danger">Payment Failed!</h2>
+        <p class="text-muted">Something went wrong with your payment. Please try again.</p>
+        <div class="mt-4">
+            <a href="{% url 'checkout' %}" class="btn btn-primary me-2">Back to Checkout</a>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        background-color: #f8f9fa;
+    }
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+</style>

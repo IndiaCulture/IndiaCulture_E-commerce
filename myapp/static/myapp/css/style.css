@@ -12,6 +12,16 @@
               --nature-white: #fff;
               --nature-black: #222;
             }
+/* Global Styles */
+body {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--nature-forest);
+  background-color: var(--nature-beige);
+  margin: 0;
+  padding: 0;
+}
 
 .animate-on-scroll {
   will-change: transform, opacity;
