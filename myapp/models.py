@@ -42,6 +42,9 @@ class Product(models.Model):
     @property
     def image_urls(self):
         return [image.image.url for image in self.images.all()]
+    @property
+    def price(self):
+        return self.new_price
     
 
 class ProductImage(models.Model):

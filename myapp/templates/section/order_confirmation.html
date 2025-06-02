@@ -46,6 +46,6 @@
         <p>Order ID: {{ order.order_code }}</p>
         <p>We will deliver to: {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
         <p>Payment Method: {{ order.payment_method }}</p>
-        <a href="{% url 'my_orders' %}" class="my-orders-link">View My Orders</a>
+        <a href="{% url 'myorder' %}" class="my-orders-link">View My Orders</a>
     </div>
 </div>
