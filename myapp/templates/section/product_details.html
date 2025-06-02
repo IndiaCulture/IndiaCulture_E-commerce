@@ -7,51 +7,90 @@
 </style>
 <section class="product-section position-relative">
     <div class="container">
-        <div class="products-title mb-4">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <span>{{ product.name }}</span>
+        <div class="products-title mb-4 d-flex align-items-center gap-3">
+            {% if product.image_urls %}
+                <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0.8rem;">
+            {% endif %}
+            <span class="fs-3 fw-bold">{{ product.name }}</span>
         </div>
-
-        <br><br>
+        <div class="mb-4">
+            <a href="javascript:history.back()" class="btn btn-primary">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+        </div>
 
         <div class="product-card-details shadow-lg">
             <div class="row product-details-flex align-items-center">
                 <div class="col-md-5 text-center mb-4 mb-md-0">
-                    <div class="product-image-container d-inline-block" style="width: 280px; height: 280px; background: #e6f0ff; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 4px 24px #4f8cff18;">
-                        <img class="product-image" src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 1.2rem;" />
+                    <div class="product-image-container position-relative d-inline-block" style="width: 280px; height: 280px; background: #e6f0ff; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 4px 24px #4f8cff18;">
+
+                        <!-- Image Carousel -->
+                        <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+                            <div class="carousel-inner h-100">
+                                {% for image_url in product.image_urls %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %} h-100">
+                                        <img src="{{ image_url }}" class="d-block w-100 h-100" style="object-fit: cover;" alt="{{ product.name }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev" style="width: 15%; color: #333;">
+                                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next" style="width: 15%; color: #333;">
+                                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-7">
-                    <div class="product-title">{{ product.name }}</div>
-                    <div class="product-meta">
+                <div class="col-md-7 ps-5">
+                    <div class="product-title fs-4 fw-semibold">{{ product.name }}</div>
+
+                    <div class="product-meta mb-2 text-muted">
                         Category: {{ product.category.name }} &nbsp;|&nbsp;
-                        {% if product.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}
+                        {% if product.stock > 0 %}<span class="text-success">In Stock</span>{% else %}<span class="text-danger">Out of Stock</span>{% endif %}
                     </div>
-                    <div class="product-price">₹{{ product.price }}</div>
-                    <div class="product-desc">
+
+                    {% if product.offer_line %}
+                        <div class="mb-3">
+                            <span class="text-success p-2 fs-6">{{ product.offer_line }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="product-price fs-4 fw-bold mb-3">
+                        {% if product.old_price %}
+                            <span class="text-danger text-decoration-line-through">₹{{ product.old_price }}</span>
+                            <span class="text-success ms-2">₹{{ product.new_price }}</span>
+                        {% else %}
+                            <span class="text-success">₹{{ product.new_price }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-desc mb-4">
                         {{ product.description }}
                     </div>
 
                     <a href="{% url 'add_to_cart' product.id %}" data-auth-required>
-                        <button class="btn btn-cart">
+                        <button class="btn btn-cart mb-2">
                             <i class="fa-solid fa-cart-plus me-1"></i>Add to Cart
                         </button>
                     </a>
                     {% if user.is_authenticated %}
                         {% if in_wishlist %}
-                            <a href="{% url 'remove_from_wishlist' product.id %}" ><button class="btn btn-cart">Remove from Wishlist</button></a>
+                            <a href="{% url 'remove_from_wishlist' product.id %}"><button class="btn btn-cart">Remove from Wishlist</button></a>
                         {% else %}
-                            <a href="{% url 'add_to_wishlist' product.id %}" ><button class="btn btn-cart">Add to Wishlist</button></a>
+                            <a href="{% url 'add_to_wishlist' product.id %}"><button class="btn btn-cart">Add to Wishlist</button></a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'login' %}?next={{ request.path }}" ><button class="btn btn-cart">Login to Wishlist</button></a>
+                        <a href="{% url 'login' %}?next={{ request.path }}"><button class="btn btn-cart">Login to Wishlist</button></a>
                     {% endif %}
 
                     <ul class="product-info-list mt-4">
-                        <li><i class="fa-solid fa-truck-fast"></i>Free shipping on orders over ₹399</li>
-                        <li><i class="fa-solid fa-shield-halved"></i>100% Authentic Products</li>
-                        <li><i class="fa-solid fa-phone"></i>24/7 Customer Support</li>
+                        <li><i class="fa-solid fa-truck-fast"></i> Free shipping on orders over ₹399</li>
+                        <li><i class="fa-solid fa-shield-halved"></i> 100% Authentic Products</li>
+                        <li><i class="fa-solid fa-phone"></i> 24/7 Customer Support</li>
                     </ul>
                 </div>
             </div>

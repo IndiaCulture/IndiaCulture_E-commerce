@@ -3,12 +3,15 @@ from django.conf import settings
 import random
 from django.utils import timezone
 from datetime import timedelta
+from myapp.storage import LowQualityCloudinaryStorage
+from cloudinary.uploader import destroy
+from cloudinary.models import CloudinaryField
 
 
 # Category model
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to='category_images/', blank=True, null=True)
+    image = models.ImageField(storage=LowQualityCloudinaryStorage(), upload_to='category_images/', default='default-category.jpg')
 
     def __str__(self):
         return self.name
@@ -24,8 +27,10 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Added old price
+    new_price = models.DecimalField(max_digits=10, decimal_places=2)  # Renamed price to new_price
+    offer_line = models.CharField(max_length=255, blank=True, null=True)  # Added offer line
+    images = models.ManyToManyField('ProductImage', related_name='products')  # Changed to ManyToMany for multiple images
     stock = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_bestsell = models.BooleanField(default=False)
@@ -35,15 +40,31 @@ class Product(models.Model):
         return self.name
 
     @property
-    def image_url(self):
-        if self.image:
-            return self.image.url
-        return ''
+    def image_urls(self):
+        return [image.image.url for image in self.images.all()]
     
+
+class ProductImage(models.Model):
+    image = models.ImageField(storage=LowQualityCloudinaryStorage(), upload_to='product_images/')
+    alt_text = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.alt_text or "Product Image"
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                old_image = ProductImage.objects.get(pk=self.pk).image
+                if old_image != self.image:
+                    destroy(old_image.public_id)
+            except ProductImage.DoesNotExist:
+                pass
+        super().save(*args, **kwargs)
+
 
 class Offer(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='offers')
-    image = models.ImageField(upload_to='offer_images/')
+    image = models.ImageField(storage=LowQualityCloudinaryStorage(), upload_to='offer_images/')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -61,7 +82,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def subtotal(self):
-        return self.product.price * self.quantity
+        return self.product.new_price * self.quantity
     
 #Checkout and order
 class Order(models.Model):
@@ -139,7 +160,7 @@ class Review(models.Model):
 #Social gift model
 class SocialOffer(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='social_offers')
-    gif = models.FileField(upload_to='social_gifs/')  # GIF or short video
+    gif = CloudinaryField('video', resource_type='video', null=True, blank=True)  # GIF or short video
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

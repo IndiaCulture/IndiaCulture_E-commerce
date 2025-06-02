@@ -15,7 +15,7 @@
                     {% for item in cart.items.all %}
                     <li class="list-group-item d-flex justify-content-between lh-sm">
                         <div class="d-flex align-items-center">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                            <img src="{{ item.product.image_urls.0 }}" alt="{{ item.product.name }}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
                             <div>
                                 <h6 class="my-0">{{ item.product.name }}</h6>
                                 <small class="text-muted">Qty: {{ item.quantity }}</small>

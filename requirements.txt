@@ -9,6 +9,7 @@ gunicorn==23.0.0
 idna==3.10
 packaging==25.0
 pillow==11.2.1
+python-decouple==3.8
 razorpay==1.4.2
 requests==2.32.3
 six==1.17.0

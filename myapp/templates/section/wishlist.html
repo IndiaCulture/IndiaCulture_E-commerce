@@ -20,7 +20,7 @@
                         {% for item in wishlist_items %}
                         <tr>
                             <td>
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                <img src="{{ item.product.image_urls.0 }}" alt="{{ item.product.name }}">
                             </td>
                             <td>
                                 <div class="product-title">{{ item.product.name }}</div>

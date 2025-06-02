@@ -27,7 +27,7 @@
                         {% for item in cart.items.all %}
                         <tr>
                             <td>
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 80px;">
+                                <img src="{{ item.product.image_urls.0 }}" alt="{{ item.product.name }}" style="width: 80px;">
                             </td>
                             <td>
                                 <div class="product-title">{{ item.product.name }}</div>

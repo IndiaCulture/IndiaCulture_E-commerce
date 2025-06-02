@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Category, Product, Offer, Cart, CartItem, Order, OrderItem, Wishlist, Review, SocialOffer
-
+from .models import Category, Product, Offer, Cart, CartItem, Order, OrderItem, Wishlist, Review, SocialOffer, ProductImage
+from django.utils.html import format_html
 
 # Category, Product, Offer
 @admin.register(Category)
@@ -10,9 +10,20 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'stock', 'is_active', 'is_bestsell', 'created_at')
+    list_display = ('name', 'category', 'new_price', 'stock', 'is_active', 'is_bestsell', 'created_at')
     list_filter = ('is_active', 'is_bestsell', 'category')
     search_fields = ('name',)
+    
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('alt_text', 'image_preview')
+    search_fields = ('alt_text',)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 50px; height: 50px;" />', obj.image.url)
+        return "-"
+    image_preview.short_description = 'Image Preview'
 
 @admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):

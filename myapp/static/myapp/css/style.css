@@ -21,6 +21,9 @@ body {
   background-color: var(--nature-beige);
   margin: 0;
   padding: 0;
+  object-fit: cover;
+  image-rendering: auto;
+  
 }
 
 .animate-on-scroll {
