@@ -170,27 +170,3 @@
   </div>
 </section>
 
-<script>
-  // Auto-scroll functionality for feedback container
-  const feedbackContainer = document.querySelector('.feedback-container');
-  let isScrolling = false;
-
-  function autoScroll() {
-    if (!isScrolling) {
-      feedbackContainer.scrollBy({ left: 1, behavior: 'smooth' });
-      if (feedbackContainer.scrollLeft + feedbackContainer.clientWidth >= feedbackContainer.scrollWidth) {
-        feedbackContainer.scrollTo({ left: 0, behavior: 'smooth' });
-      }
-    }
-  }
-
-  setInterval(autoScroll, 50);
-
-  feedbackContainer.addEventListener('mouseover', () => {
-    isScrolling = true;
-  });
-
-  feedbackContainer.addEventListener('mouseout', () => {
-    isScrolling = false;
-  });
-</script>
