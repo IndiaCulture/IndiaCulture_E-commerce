@@ -7,7 +7,7 @@
       --nature-brown: #a98467;
       --nature-beige: #f5ebe0;
       --nature-sky: #a3cef1;
-      --nature-sand: #f6c453;
+      --nature-sand: #073802;
       --nature-leaf: #6a994e;
       --nature-forest: #31572c;
       --nature-earth: #bc6c25;
@@ -45,7 +45,7 @@
       flex: 0 0 calc(16.66% - 1rem);
       max-width: calc(16.66% - 1rem);
       background: var(--nature-white);
-      border-radius: 1rem;
+      border-radius: 0.5rem;
       box-shadow: 0 4px 24px 0 #4e944f18;
       padding: 1rem 0.75rem 0.75rem 0.75rem;
       text-align: center;
@@ -141,9 +141,9 @@
         <a href="{% url 'products' category.name %}" class="category-card text-decoration-none">
           <div class="category-icon">
             {% if category.image %}
-              <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:72px;height:72px;object-fit:cover;border-radius:8px;">
+              <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:72px;height:72px;object-fit:cover;border-radius:4px;" loading="lazy" >
             {% else %}
-              <img src="{% static 'myapp/img/placeholder.png' %}" alt="No image" style="width:72px;height:72px;object-fit:cover;border-radius:8px;">
+              <img src="{% static 'myapp/img/placeholder.png' %}" alt="No image" style="width:72px;height:72px;object-fit:cover;border-radius:4px;" loading="lazy">
             {% endif %}
           </div>
             <div class="category-label" style="margin-top: 0.5rem;">{{ category.name }}</div>

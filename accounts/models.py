@@ -20,6 +20,12 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
+    mobile = models.CharField(max_length=10)  # Add this line
+    pincode = models.CharField(max_length=6, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+
+    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

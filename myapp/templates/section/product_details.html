@@ -9,7 +9,7 @@
     <div class="container">
         <div class="products-title mb-4 d-flex align-items-center gap-3">
             {% if product.image_urls %}
-                <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0.8rem;">
+                <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0.4rem;">
             {% endif %}
             <span class="fs-3 fw-bold">{{ product.name }}</span>
         </div>
@@ -22,7 +22,7 @@
         <div class="product-card-details shadow-lg">
             <div class="row product-details-flex align-items-center">
                 <div class="col-md-5 text-center mb-4 mb-md-0">
-                    <div class="product-image-container position-relative d-inline-block" style="width: 280px; height: 280px; background: #e6f0ff; border-radius: 1.2rem; overflow: hidden; box-shadow: 0 4px 24px #4f8cff18;">
+                    <div class="product-image-container position-relative d-inline-block" style="width: 280px; height: 280px; background: #e6f0ff; border-radius: 0.6rem; overflow: hidden; box-shadow: 0 4px 24px #4f8cff18;">
 
                         <!-- Image Carousel -->
                         <div id="productCarousel" class="carousel slide h-100" data-bs-ride="carousel">

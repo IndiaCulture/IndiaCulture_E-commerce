@@ -9,6 +9,7 @@ from django.contrib import messages
 import razorpay
 from django.conf import settings
 from django.core.mail import send_mail
+from accounts.models import CustomUser
 
 
 
@@ -146,6 +147,9 @@ def checkout_view(request):
     total = sum(item.subtotal() for item in cart.items.all())
     total_paise = int(total * 100)  # Razorpay expects amount in paise
 
+    user = request.user
+
+    # Create Razorpay payment
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     payment = client.order.create({
         "amount": total_paise,
@@ -153,14 +157,24 @@ def checkout_view(request):
         "payment_capture": "1"
     })
 
-    return render(request, 'pages/checkout.html', {
+    # Final context with everything
+    context = {
         'cart': cart,
         'total': total,
         'razorpay_order_id': payment['id'],
         'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
         'currency': 'INR',
-        'amount': total_paise
-    })
+        'amount': total_paise,
+        'user_data': {
+            'name': user.name,
+            'phone': user.mobile,
+            'pincode': user.pincode,
+            'city': user.city,
+            'address': user.address
+        }
+    }
+
+    return render(request, 'pages/checkout.html', context)
 
 @login_required
 @csrf_exempt
@@ -172,6 +186,14 @@ def place_order(request):
         razorpay_payment_id = request.POST.get("razorpay_payment_id")
         razorpay_order_id = request.POST.get("razorpay_order_id")
         razorpay_signature = request.POST.get("razorpay_signature")
+        
+        user = request.user
+        user.pincode = request.POST.get('pincode')
+        user.city = request.POST.get('city')
+        user.address = request.POST.get('address')
+
+        user.save()
+        
 
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
         try:

@@ -41,6 +41,7 @@
                             <input type="text" class="form-control" id="name" name="name"
                                    placeholder="Enter your full name"
                                    pattern="[A-Za-z ]{3,}"
+                                   value="{{ user_data.name }}"
                                    title="Please enter a valid name (letters and spaces only, minimum 3 characters)"
                                    required>
                             <div class="invalid-feedback">
@@ -55,6 +56,7 @@
                             <input type="tel" class="form-control" id="phone" name="phone"
                                    placeholder="Enter your phone number"
                                    pattern="[0-9]{10}"
+                                   value="{{ user_data.phone }}"
                                    title="Please enter a valid 10-digit phone number"
                                    required>
                             <div class="invalid-feedback">
@@ -71,6 +73,7 @@
                             <input type="text" class="form-control" id="pincode" name="pincode"
                                    placeholder="Enter your pincode"
                                    pattern="[0-9]{6}"
+                                   value="{{ user_data.pincode|default_if_none:'' }}"
                                    title="Please enter a valid 6-digit pincode"
                                    required>
                             <div class="invalid-feedback">
@@ -85,6 +88,7 @@
                             <input type="text" class="form-control" id="city" name="city"
                                    placeholder="Enter your city"
                                    pattern="[A-Za-z ]{3,}"
+                                   value="{{ user_data.city|default_if_none:'' }}"
                                    title="Please enter a valid city name"
                                    required>
                             <div class="invalid-feedback">
@@ -101,7 +105,7 @@
                                   placeholder="Enter your full address"
                                   rows="2"
                                   minlength="10"
-                                  required></textarea>
+                                  required>{{ user_data.address|default_if_none:'' }}</textarea>
                         <div class="invalid-feedback">
                             Please enter a valid address (minimum 10 characters).
                         </div>
@@ -114,6 +118,7 @@
                         <input type="text" class="form-control" id="state" name="state"
                                placeholder="Enter your state"
                                pattern="[A-Za-z ]{3,}"
+                               value="Tamil Nadu"
                                title="Please enter a valid state name"
                                required>
                         <div class="invalid-feedback">

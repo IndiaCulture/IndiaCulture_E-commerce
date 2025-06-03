@@ -35,9 +35,10 @@ def signup_view(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         password = request.POST.get('password')
+        mobile = request.POST.get('mobile')  # NEW: get mobile input
 
         # Basic validation: All fields must be filled
-        if not name or not email or not password:
+        if not name or not email or not password or not mobile:
             messages.error(request, 'Please fill out all fields.')
             return redirect('signup')
 
@@ -51,13 +52,23 @@ def signup_view(request):
             messages.error(request, 'Password must be at least 6 characters long.')
             return redirect('signup')
 
+        # Mobile number basic length check
+        if len(mobile) < 10:
+            messages.error(request, 'Please enter a valid mobile number.')
+            return redirect('signup')
+
         # Check if user with this email already exists
         if CustomUser.objects.filter(email=email).exists():
             messages.error(request, 'Email is already registered. Please use a different email or log in.')
             return redirect('signup')
 
         # All good, create and login user
-        user = CustomUser.objects.create_user(email=email, password=password, name=name)
+        user = CustomUser.objects.create_user(
+            email=email,
+            password=password,
+            name=name,
+            mobile=mobile  # NEW: save mobile
+        )
         login(request, user)
         messages.success(request, f'Welcome, {name}!')
         return redirect('home')

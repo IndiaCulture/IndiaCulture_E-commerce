@@ -17,9 +17,9 @@
             <div class="bestsell-card">
                 <a href="{% url 'product_details' product.id %}">
                     {% if product.image_urls %}
-                        <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}">
+                        <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}" loading="lazy">
                     {% else %}
-                        <img src="{% static 'images/default-product.jpg' %}" alt="No image available">
+                        <img src="{% static 'images/default-product.jpg' %}" alt="No image available" loading="lazy">
                     {% endif %}
                     <div class="bestsell-info">
                         <div>
@@ -59,9 +59,9 @@
             <div class="bestsell-card">
                 <a href="{% url 'product_details' product.id %}">
                     {% if product.image_urls %}
-                        <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}">
+                        <img src="{{ product.image_urls.0 }}" alt="{{ product.name }}" loading="lazy">
                     {% else %}
-                        <img src="{% static 'images/default-product.jpg' %}" alt="No image available">
+                        <img src="{% static 'images/default-product.jpg' %}" alt="No image available" loading="lazy">
                     {% endif %}
                     <div class="bestsell-info">
                         <div>

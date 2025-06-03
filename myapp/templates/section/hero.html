@@ -14,12 +14,12 @@
         {% for offer in offers %}
           <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <a href="{% url 'product_details' offer.product.id %}">
-              <img src="{{ offer.image.url }}" class="d-block w-100" alt="Offer for {{ offer.product.name }}">
+              <img src="{{ offer.image.url }}" class="d-block w-100" alt="Offer for {{ offer.product.name }}" loading="lazy">
             </a>
           </div>
         {% empty %}
           <div class="carousel-item active">
-            <img src="{% static 'myapp/img/default_offer.jpg' %}" class="d-block w-100" alt="Default Offer">
+            <img src="{% static 'myapp/img/default_offer.jpg' %}" class="d-block w-100" alt="Default Offer" loading="lazy">
           </div>
         {% endfor %}
       </div>
