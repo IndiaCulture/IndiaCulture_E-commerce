@@ -21,7 +21,7 @@ color: var(--nature-forest);
 background-color: var(--nature-beige);
 margin: 0;
 padding: 0;
-padding-top: 83px; /* Adjust for fixed navbar */
+padding-top: 83px;
 object-fit: cover;
 image-rendering: auto;
 
@@ -50,7 +50,7 @@ nav .navbar-brand {
 font-weight: bold;
 font-size: 1.7rem;
 letter-spacing: 2px;
-background: linear-gradient(90deg, var(--nature-black), var(--nature-white), var(--nature-black));
+background: linear-gradient(90deg, var(--nature-black), var(--nature-black));
 background-size: 200% auto;
 color: #fff;
 background-clip: text;
@@ -63,7 +63,7 @@ animation: gradientMove 3s linear infinite;
 100% {background-position: 200%;}
 }
 nav .navbar-nav .nav-link {
-color: var(--nature-forest) !important;
+color: var(--nature-black) !important;
 font-size: 1.1rem;
 margin: 0 10px;
 position: relative;
