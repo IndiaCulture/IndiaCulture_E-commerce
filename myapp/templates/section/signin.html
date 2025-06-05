@@ -342,6 +342,38 @@
     </section>
 
     <script>
+        const signInForm = document.getElementById('signInForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const panelText = document.getElementById('panelText');
+
+        toggleBtn.addEventListener('click', () => {
+            const isSignUp = signUpForm.classList.contains('active');
+            if (isSignUp) {
+                signUpForm.classList.remove('active');
+                signInForm.classList.add('active');
+                toggleBtn.textContent = 'Sign Up';
+                panelText.innerHTML = "Don't have an account?<br>Sign up and join us!";
+            } else {
+                signInForm.classList.remove('active');
+                signUpForm.classList.add('active');
+                toggleBtn.textContent = 'Sign In';
+                panelText.innerHTML = "Already have an account?<br>Just sign in.";
+            }
+        });
+
+        // Animate form transitions
+        function animateFormSwitch(form) {
+            form.style.opacity = 0;
+            setTimeout(() => {
+                form.style.opacity = 1;
+            }, 200);
+        }
+        toggleBtn.addEventListener('click', () => {
+            animateFormSwitch(signInForm);
+            animateFormSwitch(signUpForm);
+        }); 
+        
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('signUpForm').addEventListener('submit', function(event) {
                 const name = this.name.value.trim();
