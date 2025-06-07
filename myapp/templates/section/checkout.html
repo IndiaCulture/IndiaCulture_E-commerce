@@ -1,3 +1,4 @@
+{% load static %}
 <div class="shape shape1"></div>
 <div class="shape shape2"></div>
 <div class="shape shape3"></div>
@@ -31,7 +32,7 @@
                 </ul>
             </div>
             <!-- Checkout Form -->
-            <form class="form-section needs-validation" method="POST" action="{% url 'place_order' %}" novalidate>
+            <form id="checkout-form" class="form-section needs-validation" method="POST" action="{% url 'place_order' %}" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -126,12 +127,41 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 mt-2">
-                    <i class="fa-solid fa-lock me-2"></i>Place Order
+                <div class="mb-3">
+                    <h5>Pay via UPI</h5>
+                    <p>Click the button below or scan the QR code to pay <strong>₹{{ total }}</strong></p>
+                
+                    <a href="{{ upi_link }}" class="btn btn-success btn-sm mb-3" style="font-weight: bold;" target="_blank" rel="noopener noreferrer">
+                        Pay ₹{{ total }} via UPI App
+                    </a>
+                
+                    <!-- Optional: if you want still show the QR code -->
+                    
+                </div>
+                
+                <div class="mb-3">
+                    <label for="payment_screenshot" class="form-label">Upload Payment Screenshot</label>
+                    <input type="file" class="form-control" name="payment_screenshot"  accept="image/*" required>
+                </div>
+                
+                <button type="submit" class="btn btn-success w-100 mt-2">
+                    <i class="fa-solid fa-check-circle me-2"></i>Submit Payment & Place Order
                 </button>
             </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('checkout-form');
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            form.classList.add('was-validated');
+                        }
+                    }, false);
+                });
+            </script>
             
-            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            {% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
             (function () {
                 'use strict';
@@ -184,6 +214,6 @@
                 }
             
                 form.addEventListener('submit', preventFormSubmit, false);
-            })();
+            })(); {% endcomment %}
             </script>
             

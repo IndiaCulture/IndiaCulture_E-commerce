@@ -10,6 +10,7 @@ import razorpay
 from django.conf import settings
 from django.core.mail import send_mail
 from accounts.models import CustomUser
+from urllib.parse import quote
 
 
 
@@ -145,26 +146,46 @@ def update_cart(request, item_id):
 def checkout_view(request):
     cart = get_object_or_404(Cart, user=request.user)
     total = sum(item.subtotal() for item in cart.items.all())
-    total_paise = int(total * 100)  # Razorpay expects amount in paise
+    # total_paise = int(total * 100)  # Razorpay expects amount in paise
 
     user = request.user
+    
+    # Define UPI ID (could be in settings or DB)
+    upi_id = '9003689821@okbizaxis'  # replace with your UPI or fetch dynamically
+    
+    customer_name = quote(user.name)
+    mobile_no = quote(user.mobile)
+    payee_name = quote("Mr TAMILSELVAN  M")
 
+    # Build UPI link with amount and payee name (URL-encoded)
+    upi_link = (
+        f"upi://pay?"
+        f"pa={upi_id}"
+        f"&pn={payee_name}"
+        f"&am={total}"
+        f"&cu=INR"
+        f"&tn=Payment%20from%20{customer_name}"
+        f"&tr=Mobile%Number%20{mobile_no}"
+    )
     # Create Razorpay payment
-    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-    payment = client.order.create({
-        "amount": total_paise,
-        "currency": "INR",
-        "payment_capture": "1"
-    })
+    # client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+    # payment = client.order.create({
+    #     "amount": total_paise,
+    #     "currency": "INR",
+    #     "payment_capture": "1"
+    # })
 
     # Final context with everything
     context = {
         'cart': cart,
         'total': total,
-        'razorpay_order_id': payment['id'],
-        'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
-        'currency': 'INR',
-        'amount': total_paise,
+        # 'razorpay_order_id': payment['id'],
+        # 'razorpay_merchant_key': settings.RAZORPAY_KEY_ID,
+        # 'currency': 'INR',
+        # 'amount': total_paise,
+        'total': total,
+        'upi_id': upi_id,
+        'upi_link': upi_link,
         'user_data': {
             'name': user.name,
             'phone': user.mobile,
@@ -182,30 +203,16 @@ def place_order(request):
     if request.method == 'POST':
         cart = get_object_or_404(Cart, user=request.user)
 
-        # Razorpay payment details
-        razorpay_payment_id = request.POST.get("razorpay_payment_id")
-        razorpay_order_id = request.POST.get("razorpay_order_id")
-        razorpay_signature = request.POST.get("razorpay_signature")
-        
+        # Save address info
         user = request.user
         user.pincode = request.POST.get('pincode')
         user.city = request.POST.get('city')
         user.address = request.POST.get('address')
-
         user.save()
-        
 
-        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-        try:
-            client.utility.verify_payment_signature({
-                'razorpay_order_id': razorpay_order_id,
-                'razorpay_payment_id': razorpay_payment_id,
-                'razorpay_signature': razorpay_signature
-            })
-        except:
-            return render(request, 'pages/payment_failed.html')
+        screenshot = request.FILES.get('payment_screenshot')  # <- get uploaded image
 
-        # If payment is successful
+        # Create order
         order = Order.objects.create(
             user=request.user,
             full_name=request.POST.get('name'),
@@ -214,10 +221,9 @@ def place_order(request):
             city=request.POST.get('city'),
             state=request.POST.get('state'),
             pincode=request.POST.get('pincode'),
-            payment_method='UPI (Razorpay)',
-            razorpay_order_id=razorpay_order_id,
-            razorpay_payment_id=razorpay_payment_id,
-            razorpay_signature=razorpay_signature,
+            payment_method='Static UPI Screenshot',
+            payment_screenshot=screenshot,
+            is_paid=False  # default, you’ll verify it later
         )
 
         for item in cart.items.all():
@@ -228,24 +234,97 @@ def place_order(request):
                 price=item.product.price,
             )
 
-        # Send Email
-        subject = f'New Order #{order.order_code}'
+        # Send email to owner for manual verification
+        subject = f'Order #{order.order_code} — Payment Screenshot Uploaded'
         message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\n\n"
+        message += "Order placed with manual payment. Screenshot uploaded.\nPlease verify and mark it as paid in admin.\n\n"
         message += "Ordered Items:\n"
         for item in order.items.all():
             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
         message += f"\nTotal: ₹{sum(i.price * i.quantity for i in order.items.all())}"
-        
-        # To Owner
+
         send_mail(subject, message, settings.EMAIL_HOST_USER, ['connect.procols@gmail.com'])
 
-        # To Customer
-        send_mail(f"Order Confirmation #{order.order_code}", f"Thank you for your order!\n\n{message}", settings.EMAIL_HOST_USER, [request.user.email])
+        # To customer
+        send_mail(f"Order Received #{order.order_code}",
+                  f"Thank you for your payment! We will verify it shortly and confirm your order.\n\n{message}",
+                  settings.EMAIL_HOST_USER, [request.user.email])
 
-        # Clear Cart
+        # Clear cart
         cart.items.all().delete()
 
         return render(request, 'pages/order_confirmation.html', {'order': order})
+    
+# @login_required
+# @csrf_exempt 
+# def place_order(request):
+#     if request.method == 'POST':
+#         cart = get_object_or_404(Cart, user=request.user)
+
+#         # Razorpay payment details
+#         razorpay_payment_id = request.POST.get("razorpay_payment_id")
+#         razorpay_order_id = request.POST.get("razorpay_order_id")
+#         razorpay_signature = request.POST.get("razorpay_signature")
+        
+#         user = request.user
+#         user.pincode = request.POST.get('pincode')
+#         user.city = request.POST.get('city')
+#         user.address = request.POST.get('address')
+
+#         user.save()
+        
+
+#         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+#         try:
+#             client.utility.verify_payment_signature({
+#                 'razorpay_order_id': razorpay_order_id,
+#                 'razorpay_payment_id': razorpay_payment_id,
+#                 'razorpay_signature': razorpay_signature
+#             })
+#         except:
+#             return render(request, 'pages/payment_failed.html')
+
+#         # If payment is successful
+#         order = Order.objects.create(
+#             user=request.user,
+#             full_name=request.POST.get('name'),
+#             phone=request.POST.get('phone'),
+#             address=request.POST.get('address'),
+#             city=request.POST.get('city'),
+#             state=request.POST.get('state'),
+#             pincode=request.POST.get('pincode'),
+#             payment_method='UPI (Razorpay)',
+#             razorpay_order_id=razorpay_order_id,
+#             razorpay_payment_id=razorpay_payment_id,
+#             razorpay_signature=razorpay_signature,
+#         )
+
+#         for item in cart.items.all():
+#             OrderItem.objects.create(
+#                 order=order,
+#                 product=item.product,
+#                 quantity=item.quantity,
+#                 price=item.product.price,
+#             )
+
+#         # Send Email
+#         subject = f'New Order #{order.order_code}'
+#         message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\n\n"
+#         message += "Ordered Items:\n"
+#         for item in order.items.all():
+#             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
+#         message += f"\nTotal: ₹{sum(i.price * i.quantity for i in order.items.all())}"
+        
+#         # To Owner
+#         send_mail(subject, message, settings.EMAIL_HOST_USER, ['connect.procols@gmail.com'])
+
+#         # To Customer
+#         send_mail(f"Order Confirmation #{order.order_code}", f"Thank you for your order!\n\n{message}", settings.EMAIL_HOST_USER, [request.user.email])
+
+#         # Clear Cart
+#         cart.items.all().delete()
+
+#         return render(request, 'pages/order_confirmation.html', {'order': order})
 
     
 # MY ORDER VIEWS

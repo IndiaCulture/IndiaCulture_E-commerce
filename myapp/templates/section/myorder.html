@@ -57,6 +57,14 @@
                         <p class="mb-1">{{ order.full_name }} | {{ order.phone }}</p>
                         <p class="mb-1">{{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
                         <p class="mb-1">Payment Method: <strong>{{ order.payment_method }}</strong></p>
+
+                        {% if order.payment_screenshot %}
+                          <div class="mt-2">
+                            <p class="mb-1 fw-bold">Your Payment Screenshot:</p>
+                            <img src="{{ order.payment_screenshot.url }}" alt="Payment Screenshot" style="max-width: 200px; height: auto; border: 1px solid #ccc; border-radius: 8px;">
+                          </div>
+                        {% endif %}
+
                         <p class="mb-1">Expected Delivery: 
                           <strong>
                             {% if order.expected_delivery %}

@@ -15,6 +15,8 @@ import os
 import myapp
 from django.contrib.messages import constants as messages
 from decouple import config
+import dj_database_url  # We'll install this next
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,13 +92,14 @@ WSGI_APPLICATION = 'ECommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
+DATABASES = {
+    'default': dj_database_url.parse(
+        config('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -189,8 +192,8 @@ JAZZMIN_SETTINGS = {
 }
 
 # Razorpay settings
-RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
-RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
+# RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID')
+# RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET')
 
 
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')

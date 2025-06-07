@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, Product, Offer, Cart, CartItem, Order, OrderItem, Wishlist, Review, SocialOffer, ProductImage
 from django.utils.html import format_html
+from django.contrib import messages
 
 # Category, Product, Offer
 @admin.register(Category)
@@ -99,16 +100,30 @@ def mark_as_delivered(modeladmin, request, queryset):
 
 mark_as_delivered.short_description = "Mark selected orders as Delivered"
 
+@admin.action(description='Mark selected orders as Paid')
+def mark_as_paid(modeladmin, request, queryset):
+    updated = queryset.update(is_paid=True)
+    modeladmin.message_user(
+        request,
+        f"{updated} order(s) marked as Paid.",
+        messages.SUCCESS
+    )
+
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_code', 'full_name', 'phone', 'status', 'expected_delivery', 'created_at')
-    list_filter = ('status', 'created_at')
+    list_display = ('order_code', 'full_name', 'phone', 'status', 'is_paid', 'expected_delivery', 'created_at')
+    list_filter = ('status', 'is_paid', 'created_at')
     search_fields = ('order_code', 'full_name', 'phone')
     list_editable = ('status',)
-    actions = [mark_as_delivered]
+    actions = [mark_as_delivered, mark_as_paid]
     inlines = [OrderItemInline]
+    readonly_fields = ('payment_screenshot_preview',)
 
-    # Razorpay fields are shown as read-only (to view transaction data)
-    readonly_fields = ('razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature')
+    def payment_screenshot_preview(self, obj):
+        if obj.payment_screenshot:
+            return format_html('<img src="{}" width="300" />', obj.payment_screenshot.url)
+        return "No screenshot uploaded"
+    payment_screenshot_preview.short_description = "Payment Screenshot"
+
 
     def order_code(self, obj):
         return obj.order_code
@@ -117,6 +132,25 @@ class OrderAdmin(admin.ModelAdmin):
     def full_name(self, obj):
         return obj.full_name
     full_name.short_description = 'Customer Name'
+
+# class OrderAdmin(admin.ModelAdmin):
+#     list_display = ('order_code', 'full_name', 'phone', 'status', 'expected_delivery', 'created_at')
+#     list_filter = ('status', 'created_at')
+#     search_fields = ('order_code', 'full_name', 'phone')
+#     list_editable = ('status',)
+#     actions = [mark_as_delivered]
+#     inlines = [OrderItemInline]
+
+#     # # Razorpay fields are shown as read-only (to view transaction data)
+#     # readonly_fields = ('razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature')
+
+#     def order_code(self, obj):
+#         return obj.order_code
+#     order_code.short_description = 'Order Code'
+
+#     def full_name(self, obj):
+#         return obj.full_name
+#     full_name.short_description = 'Customer Name'
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('get_order_code', 'get_order_name', 'product', 'quantity', 'price', 'subtotal')

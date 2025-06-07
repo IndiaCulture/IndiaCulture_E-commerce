@@ -6,6 +6,7 @@ from datetime import timedelta
 from myapp.storage import LowQualityCloudinaryStorage
 from cloudinary.uploader import destroy
 from cloudinary.models import CloudinaryField
+from django.core.validators import FileExtensionValidator
 
 
 # Category model
@@ -110,9 +111,11 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     order_code = models.CharField(max_length=4, unique=True, blank=True, null=True)
     expected_delivery = models.DateField(blank=True, null=True)
-    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
-    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
-    razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
+    # razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    # razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    # razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
+    payment_screenshot = CloudinaryField('Payment Screenshot', blank=True, null=True)
+    is_paid = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         # Set order_code if not already set
