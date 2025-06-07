@@ -1,3 +1,5 @@
 venv/
 .env
 myapp/static/
+db.sqlite3
+data.json
