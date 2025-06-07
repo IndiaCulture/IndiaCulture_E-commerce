@@ -143,7 +143,7 @@
             {% if category.image %}
               <img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:72px;height:72px;object-fit:cover;border-radius:4px;" loading="lazy" >
             {% else %}
-              <img src="{% static 'myapp/img/placeholder.png' %}" alt="No image" style="width:72px;height:72px;object-fit:cover;border-radius:4px;" loading="lazy">
+              <img src="{% static 'myapp/img/logo.png' %}" alt="No image" style="width:72px;height:72px;object-fit:cover;border-radius:4px;" loading="lazy">
             {% endif %}
           </div>
             <div class="category-label" style="margin-top: 0.5rem;">{{ category.name }}</div>

@@ -29,13 +29,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_m5g91e=$543tj(1*oij67it9khqwb3w24q$8y^2$j(epl23ym'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-# DEBUG = False
+# DEBUG = True
 
 # ALLOWED_HOSTS = ['*']
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -93,11 +93,14 @@ WSGI_APPLICATION = 'ECommerce.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        config('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='5432'),
+    }
 }
 
 # DATABASES = {
