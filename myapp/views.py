@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from accounts.models import CustomUser
 from urllib.parse import quote
+import threading
 
 
 
@@ -210,11 +211,11 @@ def place_order(request):
         user.address = request.POST.get('address')
         user.save()
 
-        screenshot = request.FILES.get('payment_screenshot')  # <- get uploaded image
+        screenshot = request.FILES.get('payment_screenshot')
 
         # Create order
         order = Order.objects.create(
-            user=request.user,
+            user=user,
             full_name=request.POST.get('name'),
             phone=request.POST.get('phone'),
             address=request.POST.get('address'),
@@ -223,7 +224,7 @@ def place_order(request):
             pincode=request.POST.get('pincode'),
             payment_method='Static UPI Screenshot',
             payment_screenshot=screenshot,
-            is_paid=False  # default, you’ll verify it later
+            is_paid=False
         )
 
         for item in cart.items.all():
@@ -234,7 +235,7 @@ def place_order(request):
                 price=item.product.price,
             )
 
-        # Send email to owner for manual verification
+        # Email message
         subject = f'Order #{order.order_code} — Payment Screenshot Uploaded'
         message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\n\n"
         message += "Order placed with manual payment. Screenshot uploaded.\nPlease verify and mark it as paid in admin.\n\n"
@@ -243,12 +244,17 @@ def place_order(request):
             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
         message += f"\nTotal: ₹{sum(i.price * i.quantity for i in order.items.all())}"
 
-        send_mail(subject, message, settings.EMAIL_HOST_USER, ['connect.procols@gmail.com'])
+        # Background email sending function
+        def send_order_emails():
+            try:
+                send_mail(subject, message, settings.EMAIL_HOST_USER, ['connect.procols@gmail.com'])
+                send_mail(f"Order Received #{order.order_code}",
+                          f"Thank you for your payment! We will verify it shortly and confirm your order.\n\n{message}",
+                          settings.EMAIL_HOST_USER, [user.email])
+            except Exception as e:
+                print(f"Email send failed: {e}")
 
-        # To customer
-        send_mail(f"Order Received #{order.order_code}",
-                  f"Thank you for your payment! We will verify it shortly and confirm your order.\n\n{message}",
-                  settings.EMAIL_HOST_USER, [request.user.email])
+        threading.Thread(target=send_order_emails).start()
 
         # Clear cart
         cart.items.all().delete()
