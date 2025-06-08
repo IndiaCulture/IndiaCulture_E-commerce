@@ -1,6 +1,6 @@
 <section class="orders-section py-5">
-  <div class="container">
-    <div class="orders-card">
+
+
       <h2 class="orders-title mb-4"><i class="fa-solid fa-box-open me-2"></i> My Orders</h2>
       {% if orders %}
         <div class="table-responsive">
@@ -9,7 +9,6 @@
               <tr>
                 <th>Order Code</th>
                 <th>Product(s)</th>
-                <th>Date</th>
                 <th>Status</th>
                 <th>Total</th>
               </tr>
@@ -33,7 +32,6 @@
                     <span class="text-muted">No items</span>
                   {% endif %}
                 </td>
-                <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
                 <td>
                   <span class="order-status
                     {% if order.status == 'pending' %}status-processing
@@ -49,7 +47,7 @@
               </tr>
               <!-- Order Detail & Tracking -->
               <tr>
-                <td colspan="5">
+                <td colspan="4">
                   <div class="track-section">
                     <div class="row">
                       <div class="col-md-6 text-start">
@@ -57,6 +55,7 @@
                         <p class="mb-1">{{ order.full_name }} | {{ order.phone }}</p>
                         <p class="mb-1">{{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
                         <p class="mb-1">Payment Method: <strong>{{ order.payment_method }}</strong></p>
+                        <p class="mb-1">Ordered Date: <strong>{{ order.created_at|date:"Y-m-d H:i" }}</strong></p>
 
                         {% if order.payment_screenshot %}
                           <div class="mt-2">
@@ -106,6 +105,6 @@
       {% else %}
         <div class="alert alert-info">You haven’t placed any orders yet.</div>
       {% endif %}
-    </div>
-  </div>
+      <p>If You wnat to cancel a Order Please contact us.</p>
+
 </section>

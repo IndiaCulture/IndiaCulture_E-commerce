@@ -5,14 +5,14 @@
       }
       
       .hamburger-label {
-        width: 43px;
+        width: 40px;
         height: 40px;
         display: block;
         cursor: pointer;
       }
       
       .hamburger-label div {
-        width: 45px;
+        width: 40px;
         height: 6px;
         border-radius: 50px;
         background-color: #000000;
@@ -74,7 +74,8 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-store me-1"></i>Categories
+                                <i class="fa-solid fa-store me-1"></i>Categories 
+                                <i class="fa-solid fa-angle-down ms-1"></i>
                             </a>
                                 <ul class="dropdown-menu" aria-labelledby="shopDropdown">
                                     {% for category in categories %}
@@ -98,9 +99,10 @@
                             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user me-1"></i>
                                 {% if request.user.is_authenticated %}
-                                    {{ request.user.name|default:request.user.email }}
+                                    {{ request.user.name|default:request.user.email }}<i class="fa-solid fa-angle-down ms-1"></i>
                                 {% else %}
                                     My Account
+                                    <i class="fa-solid fa-angle-down ms-1"></i>
                                 {% endif %}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
