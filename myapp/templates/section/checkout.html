@@ -173,7 +173,7 @@
                     const upiBtn = document.getElementById('upi-button');
             
                     const baseTotal = parseFloat({{ total|floatformat:2 }});
-                    const upiBase = `upi://pay?pa={{ upi_id }}&pn={{ payee_name|default:"TAMILSELVAN%20M" }}&cu=INR&tn=Payment%20from%20{{ user_data.name|urlencode }}&tr=Mobile%20Number%20{{ user_data.phone|urlencode }}`;
+                    const upiBase = `upi://pay?pa={{ upi_id }}&pn={{ payee_name|default:"IndiaCulture" }}&cu=INR&tn=Payment%20from%20{{ user_data.name|urlencode }}&tr=Mobile%20Number%20{{ user_data.phone|urlencode }}`;
             
                     function updateCharges() {
                         const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');

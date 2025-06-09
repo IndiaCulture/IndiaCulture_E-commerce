@@ -156,7 +156,7 @@ def checkout_view(request):
     
     customer_name = quote(user.name)
     mobile_no = quote(user.mobile)
-    payee_name = quote("TAMILSELVAN M")
+    payee_name = quote("IndiaCulture")
 
     # Build UPI link with amount and payee name (URL-encoded)
     upi_link = (
