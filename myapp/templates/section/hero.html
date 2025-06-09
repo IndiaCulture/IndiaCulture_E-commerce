@@ -11,6 +11,11 @@
   <div class="container d-flex justify-content-center align-items-center position-relative" style="padding: 0; z-index: 2;">
     <div id="heroCarousel" class="carousel slide carousel-container" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a href="#welcome">
+            <img src="{% static 'myapp/img/welcome.png' %}" class="d-block w-100" alt="Welcome Offer" loading="lazy">
+          </a>
+        </div>
         {% for offer in offers %}
           <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <a href="{% url 'product_details' offer.product.id %}">
