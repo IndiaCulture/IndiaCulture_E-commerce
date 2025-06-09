@@ -26,8 +26,25 @@
                     </li>
                     {% endfor %}
                     <li class="list-group-item d-flex justify-content-between">
-                        <strong>Total:</strong>
-                        <strong>₹{{ total }}</strong>
+                        <ul class="list-group mb-3">
+                            {% for item in cart.items.all %}
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <!-- existing product row -->
+                            </li>
+                            {% endfor %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Subtotal:</strong>
+                                <strong id="order-total">₹{{ total }}</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Courier Charge:</strong>
+                                <strong id="courier-charge">₹0</strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <strong>Final Total:</strong>
+                                <strong id="final-total">₹{{ total }}</strong>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -113,7 +130,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="state" class="form-label">State</label>
+                    <label for="state" class="form-label">State <p  style="color: black; font-size: 0.9em;" >Courier Charge According to the location</p></label>
                     <div class="input-group has-validation">
                         <span class="input-group-text"><i class="fa-solid fa-flag"></i></span>
                         <input type="text" class="form-control" id="state" name="state"
@@ -129,14 +146,11 @@
                 </div>
                 <div class="mb-3">
                     <h5>Pay via UPI</h5>
-                    <p>Click the button below to pay <strong>₹{{ total }}</strong></p>
+                    <p id="upi-text">Click the button below to pay <strong>₹{{ total }}</strong></p>
                 
-                    <a href="{{ upi_link }}" class="btn btn-success btn-sm mb-3" style="font-weight: bold;" target="_blank" rel="noopener noreferrer">
+                    <a id="upi-button" href="{{ upi_link }}" class="btn btn-success btn-sm mb-3" style="font-weight: bold;" target="_blank" rel="noopener noreferrer">
                         Pay ₹{{ total }} via UPI App
                     </a>
-                
-                    <!-- Optional: if you want still show the QR code -->
-                    
                 </div>
                 
                 <div class="mb-3">
@@ -149,6 +163,45 @@
                 </button>
             </form>
             <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const stateInput = document.getElementById('state');
+                    const totalElem = document.querySelector('#order-total');
+                    const courierElem = document.querySelector('#courier-charge');
+                    const finalElem = document.querySelector('#final-total');
+            
+                    const upiText = document.getElementById('upi-text');
+                    const upiBtn = document.getElementById('upi-button');
+            
+                    const baseTotal = parseFloat({{ total|floatformat:2 }});
+                    const upiBase = `upi://pay?pa={{ upi_id }}&pn={{ payee_name|default:"TAMILSELVAN%20M" }}&cu=INR&tn=Payment%20from%20{{ user_data.name|urlencode }}&tr=Mobile%20Number%20{{ user_data.phone|urlencode }}`;
+            
+                    function updateCharges() {
+                        const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');
+                        let courierCharge = 0;
+                    
+                        if (state === "tamilnadu") {
+                            courierCharge = baseTotal >= 500 ? 0 : 50;
+                        } else if (state) {
+                            courierCharge = 100;
+                        }
+                    
+                        const finalTotal = baseTotal + courierCharge;
+                    
+                        // Update summary
+                        courierElem.textContent = "₹" + courierCharge;
+                        finalElem.textContent = "₹" + finalTotal;
+                        totalElem.textContent = "₹" + baseTotal;
+                    
+                        // Update UPI payment section
+                        upiText.innerHTML = `Click the button below to pay <strong>₹${finalTotal}</strong>`;
+                        upiBtn.textContent = `Pay ₹${finalTotal} via UPI App`;
+                        upiBtn.href = upiBase + `&am=${finalTotal}`;
+                    }
+            
+                    stateInput.addEventListener('input', updateCharges);
+                    updateCharges();
+                });
+
                 document.addEventListener('DOMContentLoaded', function () {
                     const form = document.getElementById('checkout-form');
                     form.addEventListener('submit', function (event) {

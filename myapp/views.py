@@ -152,11 +152,11 @@ def checkout_view(request):
     user = request.user
     
     # Define UPI ID (could be in settings or DB)
-    upi_id = '9003689821@okbizaxis'  # replace with your UPI or fetch dynamically
+    upi_id = '9003689821@ybl'  # replace with your UPI or fetch dynamically
     
     customer_name = quote(user.name)
     mobile_no = quote(user.mobile)
-    payee_name = quote("Mr TAMILSELVAN  M")
+    payee_name = quote("TAMILSELVAN M")
 
     # Build UPI link with amount and payee name (URL-encoded)
     upi_link = (
