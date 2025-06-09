@@ -237,8 +237,8 @@ def place_order(request):
 
         # Email message
         subject = f'Order #{order.order_code} — Payment Screenshot Uploaded'
-        message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\n\n"
-        message += "Order placed with manual payment. Screenshot uploaded.\nPlease verify and mark it as paid in admin.\n\n"
+        message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\nPincode: {order.pincode}\nAddress: {order.address}\nState: {order.state}\n\n"
+        message += "Order placed with manual payment. Screenshot uploaded.\n\n"
         message += "Ordered Items:\n"
         for item in order.items.all():
             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
@@ -247,7 +247,7 @@ def place_order(request):
         # Background email sending function
         def send_order_emails():
             try:
-                send_mail(subject, message, settings.EMAIL_HOST_USER, ['connect.procols@gmail.com'])
+                send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculture24@gmail.com'])
                 send_mail(f"Order Received #{order.order_code}",
                           f"Thank you for your payment! We will verify it shortly and confirm your order.\n\n{message}",
                           settings.EMAIL_HOST_USER, [user.email])
