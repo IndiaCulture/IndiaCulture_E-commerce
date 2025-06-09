@@ -166,7 +166,7 @@ def checkout_view(request):
         f"&am={total}"
         f"&cu=INR"
         f"&tn=Payment%20from%20{customer_name}"
-        f"&tr=Mobile%Number%20{mobile_no}"
+        f"&tr=Mobile%20Number%20{mobile_no}"
     )
     # Create Razorpay payment
     # client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
