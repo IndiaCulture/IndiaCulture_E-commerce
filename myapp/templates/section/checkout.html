@@ -193,6 +193,14 @@
                             </button>
                             <span id="copy-holder-success" class="text-success ms-2" style="display:none;">Copied!</span>
                         </li>
+                        <li>
+                            <strong>Phone Number:</strong>
+                            <span id="bank-phone" style="cursor:pointer;" title="Click to copy">9003689821</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-phone-btn">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                            <span id="copy-phone-success" class="text-success ms-2" style="display:none;">Copied!</span>
+                        </li>
                     </ul>
                     <small class="text-muted">You can also pay via bank transfer using the above details.</small>
                 </div>
@@ -278,6 +286,7 @@
                             setupCopy('account-number', 'copy-account-btn', 'copy-account-success');
                             setupCopy('ifsc-code', 'copy-ifsc-btn', 'copy-ifsc-success');
                             setupCopy('account-holder', 'copy-holder-btn', 'copy-holder-success');
+                            setupCopy('bank-phone', 'copy-phone-btn', 'copy-phone-success');
                         });
             </script>
             
