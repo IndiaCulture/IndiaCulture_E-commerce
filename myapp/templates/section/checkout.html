@@ -34,15 +34,15 @@
                             {% endfor %}
                             <li class="list-group-item d-flex justify-content-between">
                                 <strong>Subtotal:</strong>
-                                <strong id="order-total">₹{{ total }}</strong>
+                                <strong class="order-totals">₹{{ total }}</strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <strong>Courier Charge:</strong>
-                                <strong id="courier-charge">₹0</strong>
+                                <strong class="courier-charge">₹0</strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between">
                                 <strong>Final Total:</strong>
-                                <strong id="final-total">₹{{ total }}</strong>
+                                <strong class="final-total">₹{{ total }}</strong>
                             </li>
                         </ul>
                     </li>
@@ -144,17 +144,58 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <h5>Pay via UPI</h5>
-                    <p id="upi-text">Click the button below to pay <strong>₹{{ total }}</strong></p>
-                
-                    <a id="upi-button" href="{{ upi_link }}" class="btn btn-success btn-sm mb-3" style="font-weight: bold;" target="_blank" rel="noopener noreferrer">
-                        Pay ₹{{ total }} via UPI App
-                    </a>
-                    <p class="text-muted">Having trouble with the button? Copy this UPI ID and pay manually: <strong>{{ upi_id }}</strong></p>
+                <div class="mb-3 text-center">
+                    <br>
+                    <strong>Courier Charge:</strong>
+                    <strong class="courier-charge">₹0.</strong><br>
+                    <strong>Final Total:</strong>
+                    <strong class="final-total">₹{{ total }}.</strong>
+                    
+                    <!-- UPI QR Image -->
+                    <div class="mb-2">
+                        <img src="{% static 'myapp/img/upi_qr.jpeg' %}" alt="UPI QR Code"
+                            style="max-width: 200px; width: 100%; height: auto; border: 1px solid #eee; border-radius: 8px; background: #fff; padding: 8px;">
+                    </div>
 
+                    <!-- Static UPI ID -->
+                    <p class="text-muted mb-0">Copy and pay to this UPI ID:</p>
+                    <p class="fw-bold" id="upi-id" style="word-break: break-all; cursor: pointer;" title="Click to copy">{{ upi_id }}</p>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-2" id="copy-upi-btn">
+                        <i class="fa fa-copy"></i> Copy UPI ID
+                    </button>
+                    <span id="copy-success" class="text-success ms-2" style="display:none;">Copied!</span>
                 </div>
-                
+                <div class="text-center"><b>(OR)</b></div>
+                <div class="mb-3">
+                    <strong>Bank Transfer Details:</strong>
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <strong>Account Number:</strong>
+                            <span id="account-number" style="cursor:pointer;" title="Click to copy">37054072854</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-account-btn">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                            <span id="copy-account-success" class="text-success ms-2" style="display:none;">Copied!</span>
+                        </li>
+                        <li>
+                            <strong>IFSC Code:</strong>
+                            <span id="ifsc-code" style="cursor:pointer;" title="Click to copy">SBIN0002193</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-ifsc-btn">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                            <span id="copy-ifsc-success" class="text-success ms-2" style="display:none;">Copied!</span>
+                        </li>
+                        <li>
+                            <strong>Account Holder Name:</strong>
+                            <span id="account-holder" style="cursor:pointer;" title="Click to copy">Tamilselvan M</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-holder-btn">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                            <span id="copy-holder-success" class="text-success ms-2" style="display:none;">Copied!</span>
+                        </li>
+                    </ul>
+                    <small class="text-muted">You can also pay via bank transfer using the above details.</small>
+                </div>
                 
                 <div class="mb-3">
                     <label for="payment_screenshot" class="form-label">Upload Payment Screenshot You Paid</label>
@@ -167,55 +208,77 @@
             </form>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                    const stateInput = document.getElementById('state');
-                    const totalElem = document.querySelector('#order-total');
-                    const courierElem = document.querySelector('#courier-charge');
-                    const finalElem = document.querySelector('#final-total');
-            
-                    const upiText = document.getElementById('upi-text');
-                    const upiBtn = document.getElementById('upi-button');
+                const baseTotal = parseFloat("{{ total }}") || 0;
 
-                    const baseTotal = parseFloat({{ total|floatformat:2 }});
-                    const upiBase = `upi://pay?pa={{ upi_id }}&am=AMOUNT&cu=INR`;
-            
-                    function updateCharges() {
-                        const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');
-                        let courierCharge = 0;
-                    
-                        if (state === "tamilnadu") {
-                            courierCharge = baseTotal >= 499 ? 0 : 50;
-                        } else if (state) {
-                            courierCharge = 100;
-                        }
-                    
-                        const finalTotal = baseTotal + courierCharge;
-                    
-                        // Update summary
-                        courierElem.textContent = "₹" + courierCharge;
-                        finalElem.textContent = "₹" + finalTotal;
-                        totalElem.textContent = "₹" + baseTotal;
-                    
-                        // Update UPI payment section
-                        upiText.innerHTML = `Click the button below to pay <strong>₹${finalTotal}</strong>`;
-                        upiBtn.textContent = `Pay ₹${finalTotal} via UPI App`;
-                        upiBtn.href = upiBase.replace("AMOUNT", finalTotal.toFixed(2));
+                const stateInput = document.getElementById('state');
+                const courierElem = document.querySelectorAll('.courier-charge');
+                const totalElem = document.querySelectorAll('.order-totals');
+                const finalElem = document.querySelectorAll('.final-total');
 
+                function updateCharges() {
+                    const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');
+                    let courierCharge = 0;
+
+                    if (state === "tamilnadu") {
+                        courierCharge = baseTotal >= 499 ? 0 : 50;
+                    } else if (state) {
+                        courierCharge = 100;
                     }
-            
-                    stateInput.addEventListener('input', updateCharges);
-                    updateCharges();
-                });
 
-                document.addEventListener('DOMContentLoaded', function () {
-                    const form = document.getElementById('checkout-form');
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            form.classList.add('was-validated');
-                        }
-                    }, false);
-                });
+                    const finalTotal = baseTotal + courierCharge;
+
+                    // Update all elements
+                    courierElem.forEach(el => el.textContent = "₹" + courierCharge);
+                    finalElem.forEach(el => el.textContent = "₹" + finalTotal);
+                    totalElem.forEach(el => el.textContent = "₹" + baseTotal);
+                }
+
+                // Trigger update on input
+                stateInput.addEventListener('input', updateCharges);
+                updateCharges(); // Initial run
+
+                // Form validation
+                const form = document.getElementById('checkout-form');
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        form.classList.add('was-validated');
+                    }
+                }, false);
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                            const upiIdElem = document.getElementById('upi-id');
+                            const copyBtn = document.getElementById('copy-upi-btn');
+                            const successMsg = document.getElementById('copy-success');
+                            function copyUPI() {
+                                const upiId = upiIdElem.textContent.trim();
+                                navigator.clipboard.writeText(upiId).then(function () {
+                                    successMsg.style.display = 'inline';
+                                    setTimeout(() => { successMsg.style.display = 'none'; }, 1500);
+                                });
+                            }
+                            upiIdElem.addEventListener('click', copyUPI);
+                            copyBtn.addEventListener('click', copyUPI);
+                        });
+                        document.addEventListener('DOMContentLoaded', function () {
+                            function setupCopy(id, btnId, successId) {
+                                const elem = document.getElementById(id);
+                                const btn = document.getElementById(btnId);
+                                const success = document.getElementById(successId);
+                                function copy() {
+                                    navigator.clipboard.writeText(elem.textContent.trim()).then(function () {
+                                        success.style.display = 'inline';
+                                        setTimeout(() => { success.style.display = 'none'; }, 1500);
+                                    });
+                                }
+                                elem.addEventListener('click', copy);
+                                btn.addEventListener('click', copy);
+                            }
+                            setupCopy('account-number', 'copy-account-btn', 'copy-account-success');
+                            setupCopy('ifsc-code', 'copy-ifsc-btn', 'copy-ifsc-success');
+                            setupCopy('account-holder', 'copy-holder-btn', 'copy-holder-success');
+                        });
             </script>
             
             {% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
