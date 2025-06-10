@@ -154,19 +154,13 @@ def checkout_view(request):
     # Define UPI ID (could be in settings or DB)
     upi_id = '9003689821@ybl'  # replace with your UPI or fetch dynamically
     
-    customer_name = quote(user.name)
-    mobile_no = quote(user.mobile)
-    payee_name = quote("IndiaCulture")
 
     # Build UPI link with amount and payee name (URL-encoded)
     upi_link = (
-        f"upi://pay?"
-        f"pa={upi_id}"
-        f"&pn={payee_name}"
-        f"&am={total}"
-        f"&cu=INR"
-        f"&tn=Payment%20from%20{customer_name}"
-        f"&tr=Mobile%20Number%20{mobile_no}"
+    f"upi://pay?"
+    f"pa={upi_id}"
+    f"&am={total}"
+    f"&cu=INR"
     )
     # Create Razorpay payment
     # client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))

@@ -151,7 +151,10 @@
                     <a id="upi-button" href="{{ upi_link }}" class="btn btn-success btn-sm mb-3" style="font-weight: bold;" target="_blank" rel="noopener noreferrer">
                         Pay ₹{{ total }} via UPI App
                     </a>
+                    <p class="text-muted">Having trouble with the button? Copy this UPI ID and pay manually: <strong>{{ upi_id }}</strong></p>
+
                 </div>
+                
                 
                 <div class="mb-3">
                     <label for="payment_screenshot" class="form-label">Upload Payment Screenshot You Paid</label>
@@ -171,9 +174,9 @@
             
                     const upiText = document.getElementById('upi-text');
                     const upiBtn = document.getElementById('upi-button');
-            
+
                     const baseTotal = parseFloat({{ total|floatformat:2 }});
-                    const upiBase = `upi://pay?pa={{ upi_id }}&pn={{ payee_name|default:"IndiaCulture" }}&cu=INR&tn=Payment%20from%20{{ user_data.name|urlencode }}&tr=Mobile%20Number%20{{ user_data.phone|urlencode }}`;
+                    const upiBase = `upi://pay?pa={{ upi_id }}&am=AMOUNT&cu=INR`;
             
                     function updateCharges() {
                         const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');
@@ -195,7 +198,8 @@
                         // Update UPI payment section
                         upiText.innerHTML = `Click the button below to pay <strong>₹${finalTotal}</strong>`;
                         upiBtn.textContent = `Pay ₹${finalTotal} via UPI App`;
-                        upiBtn.href = upiBase + `&am=${finalTotal}`;
+                        upiBtn.href = upiBase.replace("AMOUNT", finalTotal.toFixed(2));
+
                     }
             
                     stateInput.addEventListener('input', updateCharges);
