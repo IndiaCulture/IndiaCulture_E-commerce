@@ -216,8 +216,8 @@ def place_order(request):
             city=request.POST.get('city'),
             state=request.POST.get('state'),
             pincode=request.POST.get('pincode'),
-            payment_method='Static UPI Screenshot',
-            payment_screenshot=screenshot,
+            payment_method='WhatsApp',
+            payment_screenshot=screenshot,  # can remove later if not needed
             is_paid=False
         )
 
@@ -230,9 +230,9 @@ def place_order(request):
             )
 
         # Email message
-        subject = f'Order #{order.order_code} — Payment Screenshot Uploaded'
+        subject = f'Order #{order.order_code} — New Order'
         message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\nPincode: {order.pincode}\nAddress: {order.address}\nState: {order.state}\n\n"
-        message += "Order placed with manual payment. Screenshot uploaded.\n\n"
+        message += "Order placed via WhatsApp.\n\n"
         message += "Ordered Items:\n"
         for item in order.items.all():
             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
@@ -241,9 +241,9 @@ def place_order(request):
         # Background email sending function
         def send_order_emails():
             try:
-                send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculture24@gmail.com'])
+                send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculturea24@gmail.com'])
                 send_mail(f"Order Received #{order.order_code}",
-                          f"Thank you for your payment! We will verify it shortly and confirm your order.\n\n{message}",
+                          f"Thank you! Your order has been placed. We will reach you shortly on WhatsApp.\n\n{message}",
                           settings.EMAIL_HOST_USER, [user.email])
             except Exception as e:
                 print(f"Email send failed: {e}")
@@ -253,7 +253,20 @@ def place_order(request):
         # Clear cart
         cart.items.all().delete()
 
-        return render(request, 'pages/order_confirmation.html', {'order': order})
+        # ✅ Build WhatsApp redirect
+        admin_number = "919087821303"  # change to your admin WhatsApp number (with country code)
+        whatsapp_msg = f"*New Order #{order.order_code}*\n\n"
+        whatsapp_msg += f"👤 {order.full_name}\n📞 {order.phone}\n🏠 {order.address}, {order.city}, {order.state}, {order.pincode}\n\n"
+        whatsapp_msg += "🛒 *Items:*\n"
+        for item in order.items.all():
+            whatsapp_msg += f"- {item.product.name} (x{item.quantity}) ₹{item.price * item.quantity}\n"
+        total = sum(i.price * i.quantity for i in order.items.all())
+        whatsapp_msg += f"\n💰 *Total:* ₹{total}"
+
+        whatsapp_url = f"https://wa.me/{admin_number}?text={quote(whatsapp_msg)}"
+
+        # ✅ Redirect user straight to WhatsApp chat
+        return redirect(whatsapp_url)
     
 # @login_required
 # @csrf_exempt 

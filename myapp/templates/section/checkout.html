@@ -9,6 +9,7 @@
                 <i class="fa-solid fa-bag-shopping me-2"></i>
                 <span>Checkout</span>
             </div>
+
             <!-- Order Summary -->
             <div class="order-summary mb-4">
                 <div class="order-summary-title">Order Summary</div>
@@ -16,7 +17,8 @@
                     {% for item in cart.items.all %}
                     <li class="list-group-item d-flex justify-content-between lh-sm">
                         <div class="d-flex align-items-center">
-                            <img src="{{ item.product.image_urls.0 }}" alt="{{ item.product.name }}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                            <img src="{{ item.product.image_urls.0 }}" alt="{{ item.product.name }}" 
+                                 style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
                             <div>
                                 <h6 class="my-0">{{ item.product.name }}</h6>
                                 <small class="text-muted">Qty: {{ item.quantity }}</small>
@@ -26,30 +28,23 @@
                     </li>
                     {% endfor %}
                     <li class="list-group-item d-flex justify-content-between">
-                        <ul class="list-group mb-3">
-                            {% for item in cart.items.all %}
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <!-- existing product row -->
-                            </li>
-                            {% endfor %}
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Subtotal:</strong>
-                                <strong class="order-totals">₹{{ total }}</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Courier Charge:</strong>
-                                <strong class="courier-charge">₹0</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Final Total:</strong>
-                                <strong class="final-total">₹{{ total }}</strong>
-                            </li>
-                        </ul>
+                        <strong>Subtotal:</strong>
+                        <strong class="order-totals">₹{{ total }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Courier Charge:</strong>
+                        <strong class="courier-charge">₹0</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Final Total:</strong>
+                        <strong class="final-total">₹{{ total }}</strong>
                     </li>
                 </ul>
             </div>
+
             <!-- Checkout Form -->
-            <form id="checkout-form" class="form-section needs-validation" method="POST" action="{% url 'place_order' %}" enctype="multipart/form-data" novalidate>
+            <form id="checkout-form" class="form-section needs-validation" method="POST" 
+                  action="{% url 'place_order' %}" novalidate>
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -58,13 +53,7 @@
                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                             <input type="text" class="form-control" id="name" name="name"
                                    placeholder="Enter your full name"
-                                   pattern="[A-Za-z ]{3,}"
-                                   value="{{ user_data.name }}"
-                                   title="Please enter a valid name (letters and spaces only, minimum 3 characters)"
-                                   required>
-                            <div class="invalid-feedback">
-                                Please enter a valid name (minimum 3 characters).
-                            </div>
+                                   value="{{ user_data.name }}" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -73,225 +62,65 @@
                             <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
                             <input type="tel" class="form-control" id="phone" name="phone"
                                    placeholder="Enter your phone number"
-                                   pattern="[0-9]{10}"
-                                   value="{{ user_data.phone }}"
-                                   title="Please enter a valid 10-digit phone number"
-                                   required>
-                            <div class="invalid-feedback">
-                                Please enter a valid 10-digit phone number.
-                            </div>
+                                   value="{{ user_data.phone }}" required>
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="pincode" class="form-label">Pincode</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="fa-solid fa-location-arrow"></i></span>
-                            <input type="text" class="form-control" id="pincode" name="pincode"
-                                   placeholder="Enter your pincode"
-                                   pattern="[0-9]{6}"
-                                   value="{{ user_data.pincode|default_if_none:'' }}"
-                                   title="Please enter a valid 6-digit pincode"
-                                   required>
-                            <div class="invalid-feedback">
-                                Please enter a valid 6-digit pincode.
-                            </div>
-                        </div>
+                        <input type="text" class="form-control" id="pincode" name="pincode"
+                               placeholder="Enter your pincode"
+                               value="{{ user_data.pincode|default_if_none:'' }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="city" class="form-label">City</label>
-                        <div class="input-group has-validation">
-                            <span class="input-group-text"><i class="fa-solid fa-city"></i></span>
-                            <input type="text" class="form-control" id="city" name="city"
-                                   placeholder="Enter your city"
-                                   pattern="[A-Za-z ]{3,}"
-                                   value="{{ user_data.city|default_if_none:'' }}"
-                                   title="Please enter a valid city name"
-                                   required>
-                            <div class="invalid-feedback">
-                                Please enter a valid city name.
-                            </div>
-                        </div>
+                        <input type="text" class="form-control" id="city" name="city"
+                               placeholder="Enter your city"
+                               value="{{ user_data.city|default_if_none:'' }}" required>
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="address" class="form-label">Address</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text"><i class="fa-solid fa-map-marker-alt"></i></span>
-                        <textarea class="form-control" id="address" name="address"
-                                  placeholder="Enter your full address"
-                                  rows="2"
-                                  minlength="10"
-                                  required>{{ user_data.address|default_if_none:'' }}</textarea>
-                        <div class="invalid-feedback">
-                            Please enter a valid address (minimum 10 characters).
-                        </div>
-                    </div>
+                    <textarea class="form-control" id="address" name="address"
+                              placeholder="Enter your full address"
+                              rows="2" required>{{ user_data.address|default_if_none:'' }}</textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="state" class="form-label">State <p  style="color: black; font-size: 0.9em;" >Courier Charge According to the location</p></label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text"><i class="fa-solid fa-flag"></i></span>
-                        <input type="text" class="form-control" id="state" name="state"
-                               placeholder="Enter your state"
-                               pattern="[A-Za-z ]{3,}"
-                               value="Tamil Nadu"
-                               title="Please enter a valid state name"
-                               required>
-                        <div class="invalid-feedback">
-                            Please enter a valid state name.
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3 text-center">
-                    <br>
-                    <strong>Courier Charge:</strong>
-                    <strong class="courier-charge">₹0.</strong><br>
-                    <strong>Final Total:</strong>
-                    <strong class="final-total">₹{{ total }}.</strong>
-                    <div class="alert alert-warning mt-3" role="alert">
-                        <i class="fa fa-info-circle me-1"></i>
-                        <strong>Cash on Delivery is not available.</strong> Please pay online using UPI or Bank Transfer.
-                    </div>
-                    <!-- UPI QR Image -->
-                    <div class="mb-2">
-                        <img src="{% static 'myapp/img/upi_qr.jpeg' %}" alt="UPI QR Code"
-                            style="max-width: 200px; width: 100%; height: auto; border: 1px solid #eee; border-radius: 8px; background: #fff; padding: 8px;">
-                    </div>
 
-                    <!-- Static UPI ID -->
-                    <p class="text-muted mb-0">Copy and pay to this UPI ID:</p>
-                    <p class="fw-bold" id="upi-id" style="word-break: break-all; cursor: pointer;" title="Click to copy">{{ upi_id }}</p>
-                    <button type="button" class="btn btn-outline-secondary btn-sm mb-2" id="copy-upi-btn">
-                        <i class="fa fa-copy"></i> Copy UPI ID
-                    </button>
-                    <span id="copy-success" class="text-success ms-2" style="display:none;">Copied!</span>
-                </div>
-                <div class="text-center"><b>(OR)</b></div>
                 <div class="mb-3">
-                    <strong style="color: black;" >Bank Transfer Details:</strong>
-                    <ul class="list-unstyled mb-0">
-                        <li>
-                            <strong>Account Number:</strong>
-                            <span id="account-number" style="cursor:pointer;" title="Click to copy">37054072854</span>
-                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-account-btn">
-                                <i class="fa fa-copy"></i>
-                            </button>
-                            <span id="copy-account-success" class="text-success ms-2" style="display:none;">Copied!</span>
-                        </li>
-                        <li>
-                            <strong>IFSC Code:</strong>
-                            <span id="ifsc-code" style="cursor:pointer;" title="Click to copy">SBIN0002193</span>
-                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-ifsc-btn">
-                                <i class="fa fa-copy"></i>
-                            </button>
-                            <span id="copy-ifsc-success" class="text-success ms-2" style="display:none;">Copied!</span>
-                        </li>
-                        <li>
-                            <strong>Account Holder Name:</strong>
-                            <span id="account-holder" style="cursor:pointer;" title="Click to copy">Tamilselvan M</span>
-                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-holder-btn">
-                                <i class="fa fa-copy"></i>
-                            </button>
-                            <span id="copy-holder-success" class="text-success ms-2" style="display:none;">Copied!</span>
-                        </li>
-                        <li>
-                            <strong>Phone Number:</strong>
-                            <span id="bank-phone" style="cursor:pointer;" title="Click to copy">9003689821</span>
-                            <button type="button" class="btn btn-outline-secondary btn-sm ms-1" id="copy-phone-btn">
-                                <i class="fa fa-copy"></i>
-                            </button>
-                            <span id="copy-phone-success" class="text-success ms-2" style="display:none;">Copied!</span>
-                        </li>
-                    </ul>
-                    <small class="text-muted">You can also pay via bank transfer using the above details.</small>
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" class="form-control" id="state" name="state"
+                           value="Tamil Nadu" required>
                 </div>
-                
-                <div class="mb-3">
-                    <label for="payment_screenshot" class="form-label">Upload Payment Screenshot You Paid</label>
-                    <input type="file" class="form-control" name="payment_screenshot"  accept="image/*" required>
-                </div>
-                
+
                 <button type="submit" class="btn btn-success w-100 mt-2">
-                    <i class="fa-solid fa-check-circle me-2"></i>Submit Payment & Place Order
+                    <i class="fa-solid fa-check-circle me-2"></i>Place Order via WhatsApp
                 </button>
             </form>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                const baseTotal = parseFloat("{{ total }}") || 0;
 
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const baseTotal = parseFloat("{{ total }}") || 0;
                 const stateInput = document.getElementById('state');
                 const courierElem = document.querySelectorAll('.courier-charge');
-                const totalElem = document.querySelectorAll('.order-totals');
                 const finalElem = document.querySelectorAll('.final-total');
 
                 function updateCharges() {
-                    const state = stateInput.value.trim().toLowerCase().replace(/\s+/g, '');
-                    let courierCharge = 0;
-
-                    if (state === "tamilnadu") {
-                        courierCharge = baseTotal >= 499 ? 0 : 50;
-                    } else if (state) {
-                        courierCharge = 100;
-                    }
-
-                    const finalTotal = baseTotal + courierCharge;
-
-                    // Update all elements
+                    let courierCharge = (stateInput.value.trim().toLowerCase() === "tamil nadu" && baseTotal >= 499) ? 0 
+                                         : (stateInput.value.trim().toLowerCase() === "tamil nadu" ? 50 : 100);
                     courierElem.forEach(el => el.textContent = "₹" + courierCharge);
-                    finalElem.forEach(el => el.textContent = "₹" + finalTotal);
-                    totalElem.forEach(el => el.textContent = "₹" + baseTotal);
+                    finalElem.forEach(el => el.textContent = "₹" + (baseTotal + courierCharge));
                 }
-
-                // Trigger update on input
                 stateInput.addEventListener('input', updateCharges);
-                updateCharges(); // Initial run
-
-                // Form validation
-                const form = document.getElementById('checkout-form');
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        form.classList.add('was-validated');
-                    }
-                }, false);
+                updateCharges();
             });
-            document.addEventListener('DOMContentLoaded', function () {
-                            const upiIdElem = document.getElementById('upi-id');
-                            const copyBtn = document.getElementById('copy-upi-btn');
-                            const successMsg = document.getElementById('copy-success');
-                            function copyUPI() {
-                                const upiId = upiIdElem.textContent.trim();
-                                navigator.clipboard.writeText(upiId).then(function () {
-                                    successMsg.style.display = 'inline';
-                                    setTimeout(() => { successMsg.style.display = 'none'; }, 1500);
-                                });
-                            }
-                            upiIdElem.addEventListener('click', copyUPI);
-                            copyBtn.addEventListener('click', copyUPI);
-                        });
-                        document.addEventListener('DOMContentLoaded', function () {
-                            function setupCopy(id, btnId, successId) {
-                                const elem = document.getElementById(id);
-                                const btn = document.getElementById(btnId);
-                                const success = document.getElementById(successId);
-                                function copy() {
-                                    navigator.clipboard.writeText(elem.textContent.trim()).then(function () {
-                                        success.style.display = 'inline';
-                                        setTimeout(() => { success.style.display = 'none'; }, 1500);
-                                    });
-                                }
-                                elem.addEventListener('click', copy);
-                                btn.addEventListener('click', copy);
-                            }
-                            setupCopy('account-number', 'copy-account-btn', 'copy-account-success');
-                            setupCopy('ifsc-code', 'copy-ifsc-btn', 'copy-ifsc-success');
-                            setupCopy('account-holder', 'copy-holder-btn', 'copy-holder-success');
-                            setupCopy('bank-phone', 'copy-phone-btn', 'copy-phone-success');
-                        });
             </script>
+        </div>
+    </div>
+</section>
+
             
             {% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
