@@ -241,7 +241,7 @@ def place_order(request):
         # Background email sending function
         def send_order_emails():
             try:
-                send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculturea24@gmail.com'])
+                send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculture24@gmail.com'])
                 send_mail(f"Order Received #{order.order_code}",
                           f"Thank you! Your order has been placed. We will reach you shortly on WhatsApp.\n\n{message}",
                           settings.EMAIL_HOST_USER, [user.email])
@@ -254,7 +254,7 @@ def place_order(request):
         cart.items.all().delete()
 
         # ✅ Build WhatsApp redirect
-        admin_number = "919087821303"  # change to your admin WhatsApp number (with country code)
+        admin_number = "919003689821"  # change to your admin WhatsApp number (with country code)
         whatsapp_msg = f"*New Order #{order.order_code}*\n\n"
         whatsapp_msg += f"👤 {order.full_name}\n📞 {order.phone}\n🏠 {order.address}, {order.city}, {order.state}, {order.pincode}\n\n"
         whatsapp_msg += "🛒 *Items:*\n"
