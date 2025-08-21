@@ -205,8 +205,6 @@ def place_order(request):
         user.address = request.POST.get('address')
         user.save()
 
-        screenshot = request.FILES.get('payment_screenshot')
-
         # Create order
         order = Order.objects.create(
             user=user,
@@ -217,10 +215,10 @@ def place_order(request):
             state=request.POST.get('state'),
             pincode=request.POST.get('pincode'),
             payment_method='WhatsApp',
-            payment_screenshot=screenshot,  # can remove later if not needed
             is_paid=False
         )
 
+        # Add items
         for item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
@@ -229,6 +227,15 @@ def place_order(request):
                 price=item.product.price,
             )
 
+        # ✅ Calculate totals + courier
+        subtotal = sum(i.price * i.quantity for i in order.items.all())
+        state = order.state.strip().lower()
+        if state == "tamil nadu" or state == "tamilnadu":
+            courier_charge = 0 if subtotal >= 500 else 50
+        else:
+            courier_charge = 100
+        final_total = subtotal + courier_charge
+
         # Email message
         subject = f'Order #{order.order_code} — New Order'
         message = f"Customer: {order.full_name}\nPhone: {order.phone}\nCity: {order.city}\nPincode: {order.pincode}\nAddress: {order.address}\nState: {order.state}\n\n"
@@ -236,9 +243,9 @@ def place_order(request):
         message += "Ordered Items:\n"
         for item in order.items.all():
             message += f"- {item.product.name} (Qty: {item.quantity}) - ₹{item.price * item.quantity}\n"
-        message += f"\nTotal: ₹{sum(i.price * i.quantity for i in order.items.all())}"
+        message += f"\nSubtotal: ₹{subtotal}\nCourier Charge: ₹{courier_charge}\nFinal Total: ₹{final_total}"
 
-        # Background email sending function
+        # Send email (background)
         def send_order_emails():
             try:
                 send_mail(subject, message, settings.EMAIL_HOST_USER, ['indiaculture24@gmail.com'])
@@ -253,20 +260,19 @@ def place_order(request):
         # Clear cart
         cart.items.all().delete()
 
-        # ✅ Build WhatsApp redirect
-        admin_number = "919003689821"  # change to your admin WhatsApp number (with country code)
+        # ✅ WhatsApp redirect
+        admin_number = "919003689821"
         whatsapp_msg = f"*New Order #{order.order_code}*\n\n"
         whatsapp_msg += f"👤 {order.full_name}\n📞 {order.phone}\n🏠 {order.address}, {order.city}, {order.state}, {order.pincode}\n\n"
         whatsapp_msg += "🛒 *Items:*\n"
         for item in order.items.all():
             whatsapp_msg += f"- {item.product.name} (x{item.quantity}) ₹{item.price * item.quantity}\n"
-        total = sum(i.price * i.quantity for i in order.items.all())
-        whatsapp_msg += f"\n💰 *Total:* ₹{total}"
+        whatsapp_msg += f"\nSubtotal: ₹{subtotal}\n🚚 Courier Charge: ₹{courier_charge}\n💰 *Final Total:* ₹{final_total}"
 
         whatsapp_url = f"https://wa.me/{admin_number}?text={quote(whatsapp_msg)}"
 
-        # ✅ Redirect user straight to WhatsApp chat
         return redirect(whatsapp_url)
+
     
 # @login_required
 # @csrf_exempt 

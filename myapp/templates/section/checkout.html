@@ -101,22 +101,31 @@
             </form>
 
             <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const baseTotal = parseFloat("{{ total }}") || 0;
-                const stateInput = document.getElementById('state');
-                const courierElem = document.querySelectorAll('.courier-charge');
-                const finalElem = document.querySelectorAll('.final-total');
+document.addEventListener('DOMContentLoaded', function () {
+    const baseTotal = parseFloat("{{ total }}") || 0;
+    const stateInput = document.getElementById('state');
+    const courierElem = document.querySelectorAll('.courier-charge');
+    const finalElem = document.querySelectorAll('.final-total');
 
-                function updateCharges() {
-                    let courierCharge = (stateInput.value.trim().toLowerCase() === "tamil nadu" && baseTotal >= 499) ? 0 
-                                         : (stateInput.value.trim().toLowerCase() === "tamil nadu" ? 50 : 100);
-                    courierElem.forEach(el => el.textContent = "₹" + courierCharge);
-                    finalElem.forEach(el => el.textContent = "₹" + (baseTotal + courierCharge));
-                }
-                stateInput.addEventListener('input', updateCharges);
-                updateCharges();
-            });
-            </script>
+    function updateCharges() {
+        let state = stateInput.value.trim().toLowerCase();
+        let courierCharge = 0;
+
+        if (state === "tamil nadu" || state === "tamilnadu") {
+            courierCharge = baseTotal >= 500 ? 0 : 50;
+        } else {
+            courierCharge = 100;
+        }
+
+        courierElem.forEach(el => el.textContent = "₹" + courierCharge);
+        finalElem.forEach(el => el.textContent = "₹" + (baseTotal + courierCharge));
+    }
+
+    stateInput.addEventListener('input', updateCharges);
+    updateCharges();
+});
+</script>
+
         </div>
     </div>
 </section>
