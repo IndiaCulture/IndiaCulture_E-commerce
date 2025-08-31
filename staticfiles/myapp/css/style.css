@@ -1,9 +1,9 @@
 :root {
-              --nature-green: #4e944f;
+              --nature-green: #fff;
               --nature-dark-green: #386641;
               --nature-light-green: #b7e4c7;
               --nature-brown: #a98467;
-              --nature-beige: #f5ebe0;
+              --nature-beige: #fff;
               --nature-sky: #a3cef1;
               --nature-sand: #073802;
               --nature-leaf: #6a994e;
@@ -18,7 +18,7 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--nature-forest);
-  background-color: var(--nature-beige);
+  background-color: var(--nature-white);
   margin: 0;
   padding: 0;
   padding-top: 83px;
@@ -41,7 +41,7 @@ nav {
   z-index: 1100;
 }
 nav.bg-gradient-blue {
-  background: linear-gradient(90deg, var(--nature-dark-green), var(--nature-green),  var(--nature-sand));
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white),  var(--nature-white));
   box-shadow: 0 8px 32px 0 rgba(78, 148, 79, 0.15);
   border-bottom: 2px solid #4e944f33;
 }
@@ -91,7 +91,7 @@ nav .navbar-nav .nav-link:hover {
 nav .dropdown-menu {
   background: var(--nature-light-green);
   border-radius: 6px;
-  border: none;
+  border: solid 1px black;
   animation: dropdownFadeIn 0.4s;
   min-width: 220px;
   padding: 0.7rem 0.5rem;
@@ -126,18 +126,18 @@ nav .btn-round {
   box-shadow: 0 4px 16px 0 #4e944f22;
   font-weight: 600;
   letter-spacing: 1px;
-  background: linear-gradient(90deg, var(--nature-forest), var(--nature-green));
-  color: #fff;
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white));
+  color: #000;
+  border: solid 1px black;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 nav .btn-round:hover {
   transform: scale(1.07);
   box-shadow: 0 8px 24px 0 #4e944f44;
-  color: #fff;
+  color: #000;
 }
 nav .navbar-toggler {
-  border: none;
+  border: solid 1px black;
   outline: none;
   box-shadow: none;
 }
@@ -208,7 +208,7 @@ nav.navbar {
     left: -300px;
     width: 260px;
     height: 100vh;
-    background: var(--nature-light-green);
+    background: var(--nature-white);
     border-radius: 0 8px 8px 0;
     box-shadow: 2px 0 32px 0 #4e944f22;
     padding: 2rem 1rem 1rem 1rem;
@@ -246,7 +246,7 @@ nav.navbar {
     top: 12px;
     right: 16px;
     background: none;
-    border: none;
+    border: solid 1px black;
     font-size: 1.7rem;
     color: var(--nature-forest);
     z-index: 1100;
@@ -261,7 +261,7 @@ nav.navbar {
 }
 /* FOOTER */
 footer {
-  background: linear-gradient(135deg, var(--nature-light-green) 0%, var(--nature-beige) 100%);
+  background: linear-gradient(135deg, var(--nature-white) 0%, var(--nature-white) 100%);
   color: var(--nature-forest);
   font-size: 1rem;
   box-shadow: 0 -8px 32px 0 #31572c11;
@@ -322,7 +322,7 @@ footer .form-control:focus {
 .footer-newsletter button {
   border-radius: 0 1rem 1rem 0;
   background: linear-gradient(90deg, var(--nature-green) 60%, var(--nature-forest) 100%);
-  border: none;
+  border: solid 1px black;
   color: #fff;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -386,7 +386,7 @@ height: 500px;
 max-height: 80vw;
 border-radius: 1rem;
 box-shadow: 0 8px 32px 0 rgba(49, 87, 44, 0.18); /* nature-forest */
-background: linear-gradient(120deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+background: linear-gradient(120deg, var(--nature-white) 60%, var(--nature-white) 100%);
 backdrop-filter: blur(6px);
 overflow: hidden;
 }
@@ -786,9 +786,9 @@ overflow: hidden;
   transition: color 0.2s;
 }
 .bestsell-btn {
-  background: linear-gradient(90deg, var(--nature-green), var(--nature-sand) 80%);
-  color: #fff;
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 80%);
+  color: #000;
+  border: solid 1px black;
   border-radius: 20px;
   padding: 0.45rem 1.2rem;
   font-size: 0.95rem;
@@ -816,9 +816,9 @@ overflow: hidden;
   height: 180%;
 }
 .bestsell-btn:hover {
-  background: linear-gradient(90deg, var(--nature-sand), var(--nature-green) 80%);
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 80%);
   transform: scale(1.08) translateY(-2px);
-  color: #fff;
+  color: #000;
   box-shadow: 0 4px 16px var(--nature-sand, #f6c45333);
 }
 .bestsell-btn:active {
@@ -1161,7 +1161,7 @@ overflow: hidden;
 }
 .btn-primary {
   background: linear-gradient(90deg, var(--nature-green), var(--nature-sand) 90%);
-  border: none;
+  border: solid 1px black;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 12px;
@@ -1226,7 +1226,7 @@ overflow: hidden;
 /* CATEGORIES */
 .categories-section {
   padding: 2.5rem 1rem;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 
 .categories-title {
@@ -1386,7 +1386,7 @@ overflow: hidden;
 /* PRODUCTS */
 .products-section {
   padding: 2.5rem 1rem;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 
 .products-title {
@@ -1522,9 +1522,9 @@ overflow: hidden;
   transition: color 0.2s;
 }
 .product-btn {
-  background: linear-gradient(90deg, var(--nature-green), var(--nature-sand) 80%);
-  color: #fff;
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 80%);
+  color: #000;
+  border: solid 1px black;
   border-radius: 20px;
   padding: 0.45rem 1.2rem;
   font-size: 0.95rem;
@@ -1552,9 +1552,9 @@ overflow: hidden;
   height: 180%;
 }
 .product-btn:hover {
-  background: linear-gradient(90deg, var(--nature-sand), var(--nature-green) 80%);
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 80%);
   transform: scale(1.08) translateY(-2px);
-  color: #fff;
+  color: #000;
   box-shadow: 0 4px 16px var(--nature-sand, #f6c45333);
 }
 .product-btn:active {
@@ -1618,7 +1618,7 @@ overflow: hidden;
 /* ABOUT */
 .about-section {
   padding: 4rem 0 2rem 0;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 .about-title {
   font-size: 2.3rem;
@@ -1717,7 +1717,7 @@ overflow: hidden;
 /* PRODUCTDETAILS */
 .product-section {
   padding: 3rem 0 2rem 0;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 .product-card-details {
   background: #fff;
@@ -1779,8 +1779,8 @@ overflow: hidden;
 }
 .btn-buy,
 .btn-cart {
-  background: linear-gradient(90deg, var(--nature-green), var(--nature-sand) 90%);
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 90%);
+  border: solid 1px black;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 6px;
@@ -1788,12 +1788,12 @@ overflow: hidden;
   box-shadow: 0 4px 16px 0 var(--nature-green, #4e944f22);
   padding: 0.7rem 2.2rem;
   margin-right: 1rem;
-  color: #fff;
+  color: #000;
   transition: background 0.2s, transform 0.15s;
 }
 .btn-buy:hover,
 .btn-cart:hover {
-  background: linear-gradient(90deg, var(--nature-sand), var(--nature-green) 90%);
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 90%);
   transform: translateY(-2px) scale(1.03);
 }
 .product-info-list {
@@ -1837,7 +1837,7 @@ overflow: hidden;
   padding: 3.5rem 0 2.5rem 0;
   position: relative;
   z-index: 2;
-  background: linear-gradient(120deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(120deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 .checkout-card {
   background: rgba(255,255,255,0.98);
@@ -1927,19 +1927,19 @@ overflow: hidden;
   box-shadow: 0 0 0 2px var(--nature-green)33;
 }
 .btn-primary {
-  background: linear-gradient(90deg, var(--nature-green) 30%, var(--nature-sand) 100%);
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white) 30%, var(--nature-white) 100%);
+  border: solid 1px black;
   font-weight: 800;
   letter-spacing: 1.2px;
   border-radius: 6px;
   font-size: 1.13rem;
   box-shadow: 0 4px 18px 0 var(--nature-sand)22;
   padding: 0.8rem 2.5rem;
-  color: #fff;
+  color: #000;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
 }
 .btn-primary:hover {
-  background: linear-gradient(90deg, var(--nature-sand) 30%, var(--nature-green) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 30%, var(--nature-white) 100%);
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 8px 28px 0 var(--nature-green)33;
 }
@@ -1952,7 +1952,7 @@ overflow: hidden;
 }
 .input-group-text {
   background: var(--nature-light-green);
-  border: none;
+  border: solid 1px black;
   border-radius: 5px 0 0 5px;
   color: var(--nature-green);
   font-weight: 700;
@@ -2003,7 +2003,7 @@ overflow: hidden;
 /* MYORDER */
 .orders-section {
   padding: 4rem 1rem 3rem;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 
 .orders-card {
@@ -2070,7 +2070,7 @@ overflow: hidden;
 
 .btn-outline-primary:hover {
   background: var(--nature-green);
-  color: #fff;
+  color: #000;
 }
 
 /* Track Section */
@@ -2185,7 +2185,7 @@ overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 
 .cart-section::before, .cart-section::after {
@@ -2242,7 +2242,7 @@ overflow: hidden;
 .cart-table th, .cart-table td {
   vertical-align: middle;
   text-align: center;
-  border: none;
+  border: solid 1px black;
 }
 
 .cart-table th {
@@ -2298,7 +2298,7 @@ overflow: hidden;
   border-radius: 20%;
   padding: 0.5rem 0.7rem;
   font-size: 1.1rem;
-  border: none;
+  border: solid 1px black;
   background: var(--nature-beige);
   color: var(--nature-earth);
   transition: 0.2s ease;
@@ -2306,7 +2306,7 @@ overflow: hidden;
 
 .btn-outline-danger:hover {
   background: var(--nature-earth);
-  color: #fff;
+  color: #000;
   transform: scale(1.1) rotate(-10deg);
 }
 
@@ -2322,21 +2322,21 @@ overflow: hidden;
 }
 
 .btn-checkout {
-  background: linear-gradient(90deg, var(--nature-green) 10%, var(--nature-sand) 90%);
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white) 10%, var(--nature-white) 90%);
+  border: solid 1px black;
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   border-radius: 8px;
   font-size: 1.15rem;
   box-shadow: 0 6px 24px 0 var(--nature-sand, #f6c45322);
   padding: 0.85rem 2.5rem;
-  color: #fff;
+  color: #000;
   margin-top: 1.2rem;
   transition: 0.2s ease;
 }
 
 .btn-checkout:hover {
-  background: linear-gradient(90deg, var(--nature-sand) 10%, var(--nature-green) 90%);
+  background: linear-gradient(90deg, var(--nature-hite) 10%, var(--nature-white) 90%);
   transform: translateY(-2px) scale(1.04);
   box-shadow: 0 10px 32px 0 var(--nature-green)33;
 }
@@ -2421,7 +2421,7 @@ overflow: hidden;
 /* WATCHLIST */
 .watchlist-section {
   padding: 3rem 0 2rem 0;
-  background: linear-gradient(90deg, var(--nature-light-green) 60%, var(--nature-beige) 100%);
+  background: linear-gradient(90deg, var(--nature-white) 60%, var(--nature-white) 100%);
 }
 .watchlist-card {
   background: #fff;
@@ -2465,29 +2465,29 @@ overflow: hidden;
 }
 .btn-remove {
   color: #e1306c;
-  border: none;
+  border: solid 1px black;
   background: none;
   font-size: 1.2rem;
 }
 .btn-remove:hover {
-  color: #fff;
+  color: #000;
   background: #e1306c;
   border-radius: 20%;
 }
 .btn-move-cart {
-  background: linear-gradient(90deg, var(--nature-green), var(--nature-sand) 90%);
-  border: none;
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 90%);
+  border: solid 1px black;
   font-weight: 700;
   letter-spacing: 1px;
   border-radius: 6px;
   font-size: 1rem;
   box-shadow: 0 4px 16px 0 var(--nature-green, #4e944f22);
   padding: 0.5rem 1.5rem;
-  color: #fff;
+  color: #000;
   transition: background 0.2s, transform 0.15s;
 }
 .btn-move-cart:hover {
-  background: linear-gradient(90deg, var(--nature-sand), var(--nature-green) 90%);
+  background: linear-gradient(90deg, var(--nature-white), var(--nature-white) 90%);
   transform: translateY(-2px) scale(1.03);
 }
 @media (max-width: 575.98px) {
